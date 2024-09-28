@@ -2,20 +2,17 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-
-class LocationDestroyRequest extends FormRequest
+use Illuminate\Contracts\Validation\Validator;
+class AuthLoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
-        return true; // You can add authorization logic here if needed
+        return true;
     }
 
     /**
@@ -26,7 +23,8 @@ class LocationDestroyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'userId' => 'required|exists:users,id',
+            'email' => 'required|email|max:255|exists:users,email',
+            'password' => 'required|min:6',
         ];
     }
 
@@ -38,4 +36,5 @@ class LocationDestroyRequest extends FormRequest
             'data'      => $validator->errors()
         ]));
     }
+
 }

@@ -3,24 +3,29 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
-    public function getUserLocations(Request $request)
+    public function getUserLocations(Request $request): ?\Illuminate\Http\JsonResponse
     {
         try {
-            $user = $request->user();
-            $locations = $user->locations()->with('forecasts')->get();
+            $user = User::query()->with('locations')->findOrFail($request->userId);
+            $locations = $user->locations()->get();
 
-            return response()->json($locations, Response::HTTP_OK);
+            return response()->json([
+                'status' => true,
+                'message' => 'User locations fetched successfully',
+                'data' => $locations,
+            ], Response::HTTP_OK);
         } catch (\Exception $e) {
             \Log::error('Error fetching user locations: ' . $e->getMessage());
 
             return response()->json([
-                'error' => 'An error occurred while fetching user locations.',
-                'message' => $e->getMessage(),
+                'status' => false,
+                'message' => 'Error fetching user locations',
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

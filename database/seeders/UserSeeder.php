@@ -15,13 +15,13 @@ class UserSeeder extends Seeder
     {
         User::query()->create([
             'name' => 'Backoffice',
-            'email' => 'backoffice@example.com',
+            'email' => 'backoffice@yopmail.com',
             'password' => Hash::make('123123123'),
         ]);
 
         User::query()->create([
             'name' => 'Admin',
-            'email' => 'admin@example.com',
+            'email' => 'admin@yopmail.com',
             'password' => Hash::make('123123123'),
         ]);
     }
