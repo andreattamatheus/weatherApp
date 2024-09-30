@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\LocationDestroyRequest;
 use App\Http\Requests\LocationStoreRequest;
 use App\Services\LocationForecastService;
 use App\Services\WeatherApiService;
@@ -24,7 +23,7 @@ class LocationForecastController extends Controller
         try {
             $city = $request->get('city');
             $state = $request->get('state');
-            $user = $request->get('userId');
+            $user = auth()->id();
 
             $weatherResponse = $this->weatherService->getWeatherForecast($city, $state);
             $location = $this->locationForecastService->createLocation($user, $city, $state);
@@ -45,13 +44,12 @@ class LocationForecastController extends Controller
     /**
      * Delete a weather location.
      *
-     * @param LocationDestroyRequest $request
      * @return JsonResponse|null
      */
-    public function destroy(LocationDestroyRequest $request, string $locationId): ?\Illuminate\Http\JsonResponse
+    public function destroy(string $locationId): ?\Illuminate\Http\JsonResponse
     {
         try {
-            $this->locationForecastService->deleteLocation($locationId, $request->get('userId'));
+            $this->locationForecastService->deleteLocation($locationId, auth()->id());
 
             return response()->json([
                 'success' => true,

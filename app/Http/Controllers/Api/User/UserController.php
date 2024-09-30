@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GetUserLocationsRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +13,7 @@ class UserController extends Controller
     public function getUserLocations(Request $request): ?\Illuminate\Http\JsonResponse
     {
         try {
-            $user = User::query()->with('locations')->findOrFail($request->userId);
+            $user = User::query()->with('locations')->findOrFail(auth()->id());
             $locations = $user->locations()->get();
 
             return response()->json([

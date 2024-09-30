@@ -27,9 +27,11 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        $data = ['name' => $user->name,
+        $data = [
+            'name' => $user->name,
             'email' => $user->email,
-            'access_token' => 'Bearer ' . $token];
+            'access_token' => $token
+        ];
 
         return response()->json([
             'success' => true,

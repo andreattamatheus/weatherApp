@@ -10,10 +10,17 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::post('login', [AuthController::class, 'login']);
-Route::post('logout', [AuthController::class, 'logout']);
+Route::prefix('v1')->group(function () {
 
-Route::get('users', [UserController::class, 'index']);
-Route::get('users/locations', [UserController::class, 'getUserLocations']);
-Route::post('users/locations', [LocationForecastController::class, 'store']);
-Route::delete('locations/{id}', [LocationForecastController::class, 'destroy']);
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('logout', [AuthController::class, 'logout']);
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::prefix('users')->group(function () {
+            Route::get('', [UserController::class, 'index']);
+            Route::get('/locations', [UserController::class, 'getUserLocations']);
+            Route::post('/locations', [LocationForecastController::class, 'store']);
+            Route::delete('/locations/{id}', [LocationForecastController::class, 'destroy']);
+        });
+    });
+});

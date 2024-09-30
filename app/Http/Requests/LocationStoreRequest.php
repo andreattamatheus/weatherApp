@@ -27,8 +27,7 @@ class LocationStoreRequest extends FormRequest
     {
         return [
             'city' => 'required|string|max:255',
-            'state' => 'required|string|max:255',
-            'userId' => 'required|integer'
+            'state' => 'required|string|max:255'
         ];
     }
 

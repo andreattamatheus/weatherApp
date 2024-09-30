@@ -7,11 +7,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use App\Traits\Uuids;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, SoftDeletes, HasFactory, Notifiable, Uuids;
+    use HasApiTokens, SoftDeletes, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
