@@ -24,19 +24,12 @@ class AuthController extends Controller
         }
 
         $user = User::query()->where('email', $request->get('email'))->firstOrFail();
-
         $token = $user->createToken('auth_token')->plainTextToken;
-
-        $data = [
-            'name' => $user->name,
-            'email' => $user->email,
-            'access_token' => $token
-        ];
 
         return response()->json([
             'success' => true,
             'message' => 'User logged in successfully',
-            'data' => $data,
+            'access_token' => $token,
         ], Response::HTTP_OK);
     }
 
