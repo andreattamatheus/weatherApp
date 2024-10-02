@@ -26,7 +26,7 @@ class LocationForecastService
                 );
             });
         } catch (\Throwable $th) {
-
+            \Log::error('Error creating location: ' . $th->getMessage());
             throw new LocationForecastException($th->getMessage());
         }
     }
@@ -42,6 +42,7 @@ class LocationForecastService
                 ]);
             });
         } catch (\Throwable $th) {
+            \Log::error('Error creating location: ' . $th->getMessage());
             throw new LocationForecastException('An error occurred while saving the location.');
         }
     }
@@ -66,6 +67,7 @@ class LocationForecastService
     public function getMostRecentForecast(array $response): array
     {
         $mostRecentForecast = $response['data']['list'][count($response['data']['list']) - 1];
+        $cityData = $response['data']['city'];
 
         return [
             'date' => Carbon::parse($mostRecentForecast['dt'])->format('Y-d-m'),
@@ -73,6 +75,8 @@ class LocationForecastService
             'max_temperature' => $mostRecentForecast['main']['temp_max'],
             'condition' => $mostRecentForecast['weather'][0]['description'],
             'icon' => $mostRecentForecast['weather'][0]['icon'],
+            'city' => $cityData['name'],
+            'state' => $cityData['country'],
         ];
     }
 }

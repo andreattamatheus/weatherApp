@@ -33,7 +33,6 @@ class LocationForecastController extends Controller
                 'data' => $data
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
-            \Log::error('Error fetching forecast: ' . $e->getMessage());
 
             return response()->json([
                 'success' => false,
@@ -58,11 +57,9 @@ class LocationForecastController extends Controller
                 'message' => 'Location saved successfully!'
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
-            \Log::error('Error saving location: ' . $e->getMessage());
-
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => 'Error saving location',
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -82,10 +79,10 @@ class LocationForecastController extends Controller
                 'message' => 'Location deleted successfully!'
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
-            \Log::error('Error deleting location: ' . $e->getMessage());
+
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => 'Error deleting location',
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

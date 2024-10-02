@@ -14,7 +14,7 @@ class UserController extends Controller
         try {
             $user = User::query()->with('locations')->findOrFail(auth()->id());
             $locations = $user->locations()->with(['forecasts' => function ($query) {
-                $query->select('id', 'location_id', 'date', 'min_temperature', 'max_temperature', 'condition');
+                $query->select('id', 'location_id', 'date', 'min_temperature', 'max_temperature', 'condition', 'icon');
             }])->get(['id', 'city', 'state', 'created_at']);
 
             $data = $locations->map(function ($location) {
@@ -34,14 +34,14 @@ class UserController extends Controller
             });
 
             return response()->json([
-                'status' => true,
+                'success' => true,
                 'message' => 'User locations fetched successfully',
                 'data' => $data,
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             \Log::error('Error fetching user locations: ' . $e->getMessage());
             return response()->json([
-                'status' => false,
+                'success' => false,
                 'message' => 'Error fetching user locations',
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }

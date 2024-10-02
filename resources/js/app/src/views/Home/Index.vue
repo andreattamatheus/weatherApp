@@ -14,15 +14,15 @@
 
                 <main class="main-section">
                     <div v-if="weatherData" class="weather">
-                        <h2>{{ this.city }},
-                            {{ this.state }}</h2>
+                        <h2>{{ weatherData.city }},
+                            {{ weatherData.state }}</h2>
                             <p class="time">{{ weatherData.date }}</p>
                         <div class="flex flex-col justify-center align-center text-center">
                             <p class="temp-max">{{ weatherData.max_temperature }} °C</p>
                         </div>
-                        <div class="flex flex-row justify-center align-center text-center">
-                            <img :src="getIcon(weatherData.icon)" alt="Weather Icon" class="weather-icon" />
-                            <span class="clouds">{{ weatherData.condition }}</span>
+                        <div class="flex justify-center items-center ">
+                            <img :src="getIcon(weatherData.icon)" alt="Weather Icon"  />
+                            <p class="desc">{{ weatherData.condition }}</p>
                         </div>
                         <button @click="saveUserLocation" class="search-button mt-4">Save</button>
                     </div>
@@ -32,15 +32,13 @@
                     <div class="cast-header">Locations forecast</div>
                     <div class="forecast-list">
                         <div class="next" v-for="(location) in userLocations" :key="location.id">
-                            <div>
-                                <p class="time">{{ location.date }}</p>
-                                <p class="temp-max">{{ location.max_temperature }} °C</p>
-                                <p class="temp-min">{{ location.min_temperature }} °C</p>
+                            <p class="desc mb-4">{{ location.city }} ({{ location.date }})</p>
+                            <div class="flex  justify-center align-center">
+                                <p class="text-red mr-1">{{ location.max_temperature }} ° / </p>
+                                <p class="text-blue"> {{ location.min_temperature }} °</p>
                             </div>
-                            <p class="desc">{{ location.city }}</p>
-                            <div class="flex row justify-center align-center">
-                                {{ location }}
-                                <img :src="getIcon(location.icon)" alt="Weather Icon" class="weather-icon" />
+                            <div class="flex justify-center items-center ">
+                                <img :src="getIcon(location.icon)" alt="Weather Icon"  />
                                 <p class="desc">{{ location.condition }}</p>
                             </div>
                             <button @click="deleteUserLocation(location.id, location.date)" class="search-button">Delete</button>
@@ -81,18 +79,26 @@ export default {
     methods: {
         async fetchUserData() {
             try {
+                this.isLoading = true;
                 const response = await this.$axios.get('v1/users/locations', {
                     headers: {
                         Authorization: `Bearer ${this.apiKey}`,
                     },
                 });
-                this.getUserLocations(response.data.data);
+                if (!response.data.success) {
+                    this.$toast.error(response.data[0]);
+                    this.isLoading = false;
+                    return;
+                }
+                await this.getUserLocations(response.data.data);
+                this.isLoading = false;
             } catch (error) {
+                this.isLoading = false;
                 console.error("Error fetching weather data:", error);
             }
         },
 
-        getUserLocations(locations) {
+        async getUserLocations(locations) {
             this.userLocations = [];
             locations.forEach(location => {
                 location.forecasts.forEach(forecast => {
@@ -111,6 +117,7 @@ export default {
 
         async getForecastByCityAndState() {
             try {
+                this.isLoading = true;
                 const response = await this.$axios.get('v1/get-location-forecast', {
                     headers: {
                         Authorization: `Bearer ${this.apiKey}`,
@@ -122,19 +129,21 @@ export default {
                 });
                 if (!response.data.success) {
                     this.$toast.error(response.data[0]);
+                    this.isLoading = false;
                     return;
                 }
+                this.isLoading = false;
                 this.weatherData = response.data.data;
             } catch (error) {
                 console.error("Error fetching forecast data:", error);
             }
         },
 
-        saveUserLocation() {
+        async saveUserLocation() {
             this.isLoading = true;
 
             try {
-                const response = this.$axios.post('v1/users/locations', {
+                const response = await this.$axios.post('v1/users/locations', {
                     city: this.city,
                     state: this.state,
                     weatherData: this.weatherData,
@@ -148,35 +157,29 @@ export default {
                     this.$toast.error(response.data[0]);
                     return;
                 }
+                await this.fetchUserData();
                 this.isLoading = false;
-                this.userLocations.push({
-                    city: this.city,
-                    date: this.weatherData.date,
-                    min_temperature: this.weatherData.min_temperature,
-                    max_temperature: this.weatherData.max_temperature,
-                    condition: this.weatherData.condition
-                });
             } catch (error) {
                 this.isLoading = false;
                 console.error("Error saving user location:", error);
             }
         },
 
-        deleteUserLocation(locationId, date) {
+        async deleteUserLocation(locationId, date) {
             this.isLoading = true;
             try {
-                const response = this.$axios.delete(`v1/users/locations/${locationId}/${date}`, {
+                const response = await this.$axios.delete(`v1/users/locations/${locationId}/${date}`, {
                     headers: {
                         Authorization: `Bearer ${this.apiKey}`,
                     },
                 });
-                if (!response.success) {
+                if (!response.data.success) {
                     this.isLoading = false;
                     this.$toast.error(response.data[0]);
                     return;
                 }
                 this.isLoading = false;
-                this.userLocations = this.userLocations.filter(location => location.city !== this.city);
+                this.userLocations = this.userLocations.filter(location => location.id !== locationId);
             } catch (error) {
                 this.isLoading = false;
                 console.error("Error deleting user location:", error);
@@ -185,14 +188,6 @@ export default {
         getIcon(icon) {
             return `http://openweathermap.org/img/wn/${icon}@2x.png`;
         }
-
-    },
-    computed: {
-        temperature() {
-            return this.weatherData
-                ? Math.floor(this.weatherData.main.temp - 273)
-                : null;
-        },
 
     },
 };
