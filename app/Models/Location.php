@@ -19,6 +19,6 @@ class Location extends Model
 
     public function forecasts()
     {
-        return $this->hasMany(Forecast::class);
+        return $this->hasMany(LocationForecast::class);
     }
 }

@@ -3,33 +3,45 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GetUserLocationsRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
-    public function getUserLocations(Request $request): ?\Illuminate\Http\JsonResponse
+    public function getUserLocations(): ?\Illuminate\Http\JsonResponse
     {
         try {
             $user = User::query()->with('locations')->findOrFail(auth()->id());
-            $locations = $user->locations()->get();
+            $locations = $user->locations()->with(['forecasts' => function ($query) {
+                $query->select('id', 'location_id', 'date', 'min_temperature', 'max_temperature', 'condition');
+            }])->get(['id', 'city', 'state', 'created_at']);
+
+            $data = $locations->map(function ($location) {
+                return [
+                    'city' => $location->city,
+                    'forecasts' => $location->forecasts->map(function ($forecast) {
+                        return [
+                            'date' => Carbon::parse($forecast->date)->format('m-d-Y'),
+                            'min_temperature' => $forecast->min_temperature,
+                            'max_temperature' => $forecast->max_temperature,
+                            'condition' => $forecast->condition
+                        ];
+                    })
+                ];
+            });
 
             return response()->json([
                 'status' => true,
                 'message' => 'User locations fetched successfully',
-                'data' => $locations,
+                'data' => $data,
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             \Log::error('Error fetching user locations: ' . $e->getMessage());
-
             return response()->json([
                 'status' => false,
                 'message' => 'Error fetching user locations',
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
-
 }

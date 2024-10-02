@@ -16,6 +16,7 @@ Route::prefix('v1')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
 
     Route::middleware('auth:sanctum')->group(function () {
+        Route::get('get-location-forecast', [LocationForecastController::class, 'get']);
         Route::prefix('users')->group(function () {
             Route::get('', [UserController::class, 'index']);
             Route::get('/locations', [UserController::class, 'getUserLocations']);
