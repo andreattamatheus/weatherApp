@@ -49,8 +49,6 @@ class LocationForecastController extends Controller
             $city = $weatherData['city'];
             $state = $weatherData['state'];
 
-            \Log::alert('Weather data: ' . json_encode($weatherData));
-
             $location = $this->locationForecastService->createLocation($user, $city, $state);
             $this->locationForecastService->createLocationForecast($location, $weatherData);
 
@@ -59,6 +57,7 @@ class LocationForecastController extends Controller
                 'message' => 'Location saved successfully!'
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error saving location',

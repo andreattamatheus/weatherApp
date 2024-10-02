@@ -40,6 +40,7 @@ class UserController extends Controller
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             \Log::error('Error fetching user locations: ' . $e->getMessage());
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error fetching user locations',
