@@ -44,10 +44,12 @@ class LocationForecastController extends Controller
     public function store(LocationStoreRequest $request): ?JsonResponse
     {
         try {
-            $city = $request->get('city');
-            $state = $request->get('state');
             $user = auth()->id();
             $weatherData = $request->get('weatherData');
+            $city = $weatherData['city'];
+            $state = $weatherData['state'];
+
+            \Log::alert('Weather data: ' . json_encode($weatherData));
 
             $location = $this->locationForecastService->createLocation($user, $city, $state);
             $this->locationForecastService->createLocationForecast($location, $weatherData);

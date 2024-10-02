@@ -2,34 +2,48 @@
     <div class="flex">
         <div class="w-full flex items-start justify-left bg-background-primary font-sans vl-parent" ref="formContainer">
             <loading :active="isLoading" :is-full-page="fullPage" />
-            <div class="container">
-                <div class="header">
+            <div class="container-app">
+                <div class="header flex justify-center">
                     <h1>WEATHER APP</h1>
-                    <div class="search-bar">
-                        <input type="text" v-model="city" placeholder="Enter city name" class="search-input" />
-                        <input type="text" v-model="state" placeholder="Enter city State" class="search-input" />
-                        <button @click="getForecastByCityAndState" class="search-button">Search</button>
-                    </div>
                 </div>
 
-                <main class="main-section">
-                    <div v-if="weatherData" class="weather">
-                        <h2>{{ weatherData.city }},
-                            {{ weatherData.state }}</h2>
-                            <p class="time">{{ weatherData.date }}</p>
+                <div class="search-bar flex items-start md:space-x-4 space-y-2 sm:space-y-0">
+                    <div class="flex flex-col justify-start text-left w-full">
+                        <input type="text" v-model="city" id="city"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="Enter the city name" required />
+                        <span class="text-sm text-red-500 mt-1 ml-1" v-if="this.validationErrors.city">{{ this.validationErrors.city
+                            }}</span>
+                    </div>
+                    <div class="flex flex-col justify-start text-left w-full">
+                        <input type="text" v-model="state" id="state"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="Enter the city country" required />
+                        <span class="text-sm text-red-500 mt-1 ml-1" v-if="this.validationErrors.state">{{ this.validationErrors.state
+                            }}</span>
+                    </div>
+                    <button @click="getForecastByCityAndState"
+                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+                </div>
+                <main class="main-section ">
+                    <div v-if="weatherData" class="weather bg-gray-400 flex flex-col space-y-4">
+                        <h2>{{ weatherData?.city }},
+                            {{ weatherData?.state }}</h2>
+                        <p class="time">{{ weatherData?.date }}</p>
                         <div class="flex flex-col justify-center align-center text-center">
-                            <p class="temp-max">{{ weatherData.max_temperature }} °C</p>
+                            <p class="temp-max">{{ weatherData?.max_temperature }} °C</p>
                         </div>
                         <div class="flex justify-center items-center ">
-                            <img :src="getIcon(weatherData.icon)" alt="Weather Icon"  />
-                            <p class="desc">{{ weatherData.condition }}</p>
+                            <img :src="getIcon(weatherData?.icon)" alt="Weather Icon" />
+                            <p class="desc">{{ weatherData?.condition }}</p>
                         </div>
-                        <button @click="saveUserLocation" class="search-button mt-4">Save</button>
+                        <button @click="saveUserLocation"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
                     </div>
                 </main>
 
                 <div class="forecast">
-                    <div class="cast-header">Locations forecast</div>
+                    <div class="cast-header bg-gray-700 hover:bg-gray-800 text-white">Locations forecast</div>
                     <div class="forecast-list">
                         <div class="next" v-for="(location) in userLocations" :key="location.id">
                             <p class="desc mb-4">{{ location.city }} ({{ location.date }})</p>
@@ -38,10 +52,11 @@
                                 <p class="text-blue"> {{ location.min_temperature }} °</p>
                             </div>
                             <div class="flex justify-center items-center ">
-                                <img :src="getIcon(location.icon)" alt="Weather Icon"  />
+                                <img :src="getIcon(location.icon)" alt="Weather Icon" />
                                 <p class="desc">{{ location.condition }}</p>
                             </div>
-                            <button @click="deleteUserLocation(location.id, location.date)" class="search-button">Delete</button>
+                            <button @click="deleteUserLocation(location.id, location.date)"
+                                class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Delete</button>
                         </div>
                     </div>
                 </div>
@@ -54,23 +69,24 @@
 <script>
 import Loading from 'vue-loading-overlay';
 import HandleUserData from '@/mixins/HandleUserData';
+import ValidationForm from '@/mixins/ValidationForm';
 
 export default {
     name: "Home",
     components: {
         Loading,
     },
-    mixins: [HandleUserData],
+    mixins: [HandleUserData, ValidationForm],
     data() {
         return {
             isLoading: false,
             fullPage: false,
-            apikey: process.env.VUE_APP_API_KEY_WEATHER_APP,
             apiKey: localStorage.getItem('access_token'),
             city: "",
             state: "",
             weatherData: null,
             userLocations: [],
+            validationErrors: {},
         };
     },
     mounted() {
@@ -90,7 +106,7 @@ export default {
                     this.isLoading = false;
                     return;
                 }
-                await this.getUserLocations(response.data.data);
+                await this.setUserData(response.data.data);
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;
@@ -98,7 +114,7 @@ export default {
             }
         },
 
-        async getUserLocations(locations) {
+        async setUserData(locations) {
             this.userLocations = [];
             locations.forEach(location => {
                 location.forecasts.forEach(forecast => {
@@ -128,20 +144,20 @@ export default {
                     },
                 });
                 if (!response.data.success) {
-                    this.$toast.error(response.data[0]);
+                    this.validationErrors = this.convertErrorFromArray(response.data);
                     this.isLoading = false;
                     return;
                 }
                 this.isLoading = false;
                 this.weatherData = response.data.data;
             } catch (error) {
+                this.isLoading = false;
                 console.error("Error fetching forecast data:", error);
             }
         },
 
         async saveUserLocation() {
             this.isLoading = true;
-
             try {
                 const response = await this.$axios.post('v1/users/locations', {
                     city: this.city,
@@ -212,8 +228,8 @@ body {
     color: #333;
 }
 
-.container {
-    max-width: 1200px;
+.container-app {
+    width: 1000px;
     margin: 0 auto;
     padding: 2rem;
 }
