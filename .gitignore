@@ -19,6 +19,6 @@ yarn-error.log
 /.idea
 /.vscode
 /.zed
-/resources
+/resources/js/app/node_modules
 docker-compose.yml
 Dockerfile
