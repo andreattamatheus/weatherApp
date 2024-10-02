@@ -19,13 +19,15 @@ class UserController extends Controller
 
             $data = $locations->map(function ($location) {
                 return [
+                    'id' => $location->id,
                     'city' => $location->city,
                     'forecasts' => $location->forecasts->map(function ($forecast) {
                         return [
-                            'date' => Carbon::parse($forecast->date)->format('m-d-Y'),
+                            'date' => Carbon::parse($forecast->date)->format('Y-d-m'),
                             'min_temperature' => $forecast->min_temperature,
                             'max_temperature' => $forecast->max_temperature,
-                            'condition' => $forecast->condition
+                            'condition' => $forecast->condition,
+                            'icon' => $forecast->icon,
                         ];
                     })
                 ];

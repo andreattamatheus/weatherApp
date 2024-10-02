@@ -7,7 +7,6 @@ use App\Http\Requests\LocationStoreRequest;
 use App\Services\LocationForecastService;
 use App\Services\WeatherApiService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class LocationForecastController extends Controller
@@ -29,7 +28,10 @@ class LocationForecastController extends Controller
             }
             $data = $this->locationForecastService->getMostRecentForecast($response);
 
-            return response()->json($data, Response::HTTP_OK);
+            return response()->json([
+                'success' => true,
+                'data' => $data
+            ], Response::HTTP_OK);
         } catch (\Exception $e) {
             \Log::error('Error fetching forecast: ' . $e->getMessage());
 
@@ -46,10 +48,10 @@ class LocationForecastController extends Controller
             $city = $request->get('city');
             $state = $request->get('state');
             $user = auth()->id();
+            $weatherData = $request->get('weatherData');
 
-            $weatherResponse = $this->weatherService->getWeatherForecast($city, $state);
             $location = $this->locationForecastService->createLocation($user, $city, $state);
-            $this->locationForecastService->createLocationForecast($location, $weatherResponse);
+            $this->locationForecastService->createLocationForecast($location, $weatherData);
 
             return response()->json([
                 'success' => true,
@@ -70,10 +72,10 @@ class LocationForecastController extends Controller
      *
      * @return JsonResponse|null
      */
-    public function destroy(string $locationId): ?\Illuminate\Http\JsonResponse
+    public function destroy(string $locationId, string $date): ?\Illuminate\Http\JsonResponse
     {
         try {
-            $this->locationForecastService->deleteLocation($locationId, auth()->id());
+            $this->locationForecastService->deleteLocation($locationId, $date);
 
             return response()->json([
                 'success' => true,

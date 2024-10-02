@@ -18,6 +18,7 @@ return new class extends Migration
             $table->float('min_temperature');
             $table->float('max_temperature');
             $table->string('condition');
+            $table->string('icon')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

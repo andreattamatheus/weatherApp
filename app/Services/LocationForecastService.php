@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exceptions\LocationForecastException;
 use App\Models\Location;
 use App\Models\LocationForecast;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class LocationForecastService
@@ -12,23 +13,21 @@ class LocationForecastService
     public function createLocationForecast(Location $location, array $weatherData)
     {
         try {
-            if (empty($weatherData['data']['list'])) {
-                throw new LocationForecastException('No weather data found for the location.');
-            }
-            $mostRecentForecast = $weatherData['data']['list'][count($weatherData['data']['list']) - 1];
-            return DB::transaction(static function () use ($mostRecentForecast, $location) {
-                return LocationForecast::query()->updateOrCreate(
+            return DB::transaction(static function () use ($weatherData, $location) {
+                LocationForecast::query()->updateOrCreate(
                     ['location_id' => $location->id],
                     [
-                        'date' => date('Y-m-d', $mostRecentForecast['dt']),
-                        'min_temperature' => $mostRecentForecast['main']['temp_min'],
-                        'max_temperature' => $mostRecentForecast['main']['temp_max'],
-                        'condition' => $mostRecentForecast['weather'][0]['description'],
+                        'date' => Carbon::parse($weatherData['date'])->format('Y-d-m'),
+                        'min_temperature' => $weatherData['min_temperature'],
+                        'max_temperature' => $weatherData['max_temperature'],
+                        'condition' => $weatherData['condition'],
+                        'icon' => $weatherData['icon']
                     ]
                 );
             });
         } catch (\Throwable $th) {
-            throw new LocationForecastException('An error occurred while create the location forecast.');
+
+            throw new LocationForecastException($th->getMessage());
         }
     }
 
@@ -50,14 +49,16 @@ class LocationForecastService
     /**
      * @throws \Exception
      */
-    public function deleteLocation($locationId, $userId): void
+    public function deleteLocation(int $locationId, string $date): void
     {
         try {
-            DB::transaction(static function () use ($userId, $locationId) {
-                $location = Location::query()->where('user_id', $userId)->findOrFail($locationId);
-                $location->delete();
+            $dateParsed = Carbon::parse($date)->format('Y-d-m');
+            DB::transaction(static function () use ($locationId, $dateParsed) {
+                $location = auth()->user()->locations()->findOrFail($locationId);
+                $location->forecasts()->where('date', $dateParsed)->delete();
             });
         } catch (\Throwable $th) {
+            \Log::error('Error deleting location: ' . $th->getMessage());
             throw new LocationForecastException('An error occurred while deleting the location.');
         }
     }
@@ -67,10 +68,11 @@ class LocationForecastService
         $mostRecentForecast = $response['data']['list'][count($response['data']['list']) - 1];
 
         return [
-            'date' => date('Y-m-d', $mostRecentForecast['dt']),
+            'date' => Carbon::parse($mostRecentForecast['dt'])->format('Y-d-m'),
             'min_temperature' => $mostRecentForecast['main']['temp_min'],
             'max_temperature' => $mostRecentForecast['main']['temp_max'],
-            'condition' => $mostRecentForecast['weather'][0]['description']
+            'condition' => $mostRecentForecast['weather'][0]['description'],
+            'icon' => $mostRecentForecast['weather'][0]['icon'],
         ];
     }
 }

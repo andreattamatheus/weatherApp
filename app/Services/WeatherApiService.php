@@ -19,7 +19,7 @@ class WeatherApiService
     public function __construct()
     {
         $this->params = [
-            'APPID' =>config('services.openWeather.key')
+            'APPID' => config('services.openWeather.key')
         ];
         $this->baseUri = config('services.openWeather.url');
     }
@@ -37,7 +37,7 @@ class WeatherApiService
                 ->$method($this->baseUri . $endpoint, $params);
 
             return $this->decodeResponse($response, $endpoint);
-        } catch (RequestException|\JsonException $e) {
+        } catch (RequestException | \JsonException $e) {
             logger()->channel('weather-api')->error('[Open Weather API - Request] - ' . $endpoint, [
                 'PID' => getmypid(),
                 'message' => $e->getMessage()
@@ -82,7 +82,8 @@ class WeatherApiService
     public function getWeatherForecast(string $city, string $state): array
     {
         $params = [
-            'q' => $city . ',' . $state
+            'q' => $city . ',' . $state,
+            'units' => 'metric'
         ];
 
         return $this->sendRequest('forecast', $params);

@@ -27,7 +27,8 @@ class LocationStoreRequest extends FormRequest
     {
         return [
             'city' => 'required|string|max:255',
-            'state' => 'required|string|max:255'
+            'state' => 'required|string|max:255',
+            'weatherData' => 'sometimes|array',
         ];
     }
 

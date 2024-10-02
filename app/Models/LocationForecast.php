@@ -10,7 +10,7 @@ class LocationForecast extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['location_id', 'date', 'min_temperature', 'max_temperature', 'condition'];
+    protected $fillable = ['location_id', 'date', 'min_temperature', 'max_temperature', 'condition', 'icon'];
 
     public function location()
     {
