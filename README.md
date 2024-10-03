@@ -45,12 +45,6 @@ You don't need to do anything extra than what was asked. Keep in mind that we ar
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Overview
-
-Project has only two pages in the frontend.
-
-The /login and /home.
-
 ### Prerequisites
 
 This is an example of how to list things you need to use the software and how to install them.
@@ -134,9 +128,9 @@ php artisan queue:listen
 
 You can access the system with backoffice@yopmail.com and admin@yopmail.com. Both have the password _123123123_
 
-Needs to add to .env the URL to the api.
+Project has only two pages in the frontend: the /login and /home.
 
-For this test, it's http://localhost:8000/api/
+Needs to add to .env the URL to the api. For this test, it's http://localhost:8000/api/
 
 The frontend is inside the folder resources/js/app.
 
