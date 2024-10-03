@@ -71,6 +71,8 @@ This is an example of how to list things you need to use the software and how to
 
 ## Project API
 
+Copy the .env-example and rename it to .env
+
 Inside the .env file, you must filled the correct info about your DB.
 
 -   DB_HOST=127.0.0.1
@@ -81,18 +83,18 @@ Inside the .env file, you must filled the correct info about your DB.
 
 Also, since it has an integration service, you need to fill the:
 
--   OPENWEATHER_API_KEY with the key generated in OPENWEATHERMAP
+-   OPENWEATHER_API_KEY with the key generated in openweathermap
 -   OPENWEATHER_API_URL can be kept the same.
 
 ```
 composer install
 ```
 
-Two users will be created here: backoffice@yopmail.com and admin@yopmail.com. Both have the password _123123123_
-
 ```
 php artisan optimize
 ```
+
+Two users will be created here: backoffice@yopmail.com and admin@yopmail.com. Both have the password _123123123_
 
 ```
 php artisan migrate:fresh --seed
@@ -129,6 +131,8 @@ php artisan queue:listen
 ```
 
 ## Project Frontend
+
+You can access the system with backoffice@yopmail.com and admin@yopmail.com. Both have the password _123123123_
 
 Needs to add to .env the URL to the api.
 
