@@ -62,14 +62,11 @@ The /login and /home.
 This is an example of how to list things you need to use the software and how to install them.
 
 -   ```
-    npm install -g node@21.5
-    ```
--   ```sh
-    npm install -g npm@6.14
+    npm install -g node@16.10
     ```
 
 -   ```
-    npm install --global yarn@1.22
+    npm install -g yarn
     ```
 
 ### Installation

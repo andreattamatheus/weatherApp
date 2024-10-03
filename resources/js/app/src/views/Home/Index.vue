@@ -82,6 +82,7 @@ export default {
             isLoading: false,
             fullPage: false,
             apiKey: localStorage.getItem('access_token'),
+            imageUrl: process.env.VUE_APP_IMAGE_WEATHER_URL,
             city: "",
             state: "",
             weatherData: null,
@@ -194,15 +195,15 @@ export default {
                     this.$toast.error(response.data[0]);
                     return;
                 }
+                await this.fetchUserData();
                 this.isLoading = false;
-                this.userLocations = this.userLocations.filter(location => location.id !== locationId);
             } catch (error) {
                 this.isLoading = false;
                 console.error("Error deleting user location:", error);
             }
         },
         getIcon(icon) {
-            return `http://openweathermap.org/img/wn/${icon}@2x.png`;
+            return this.imageUrl + `/${icon}@2x.png`;
         }
 
     },
