@@ -61,6 +61,9 @@ The /login and /home.
 
 This is an example of how to list things you need to use the software and how to install them.
 
+-   ```
+    npm install -g node@21.5
+    ```
 -   ```sh
     npm install -g npm@6.14
     ```
@@ -95,15 +98,21 @@ composer install
 Two users will be created here: backoffice@yopmail.com and admin@yopmail.com. Both have the password _123123123_
 
 ```
-php artisan migrate:fresh --seed
-```
-
-```
 php artisan optimize
 ```
 
 ```
+php artisan migrate:fresh --seed
+```
+
+```
 php artisan serve
+```
+
+### Test
+
+```
+php artisan test
 ```
 
 ## Project Frontend
@@ -111,6 +120,8 @@ php artisan serve
 Needs to add to .env the URL to the api.
 
 For this test, it's http://localhost:8000/api/
+
+The frontend is inside the folder resources/js/app.
 
 ```
 yarn

@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Services\WeatherApiService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class WeatherApiServiceTest extends TestCase
