@@ -39,13 +39,6 @@ Generic Weather app. So far.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Built With
-
--   [![Vue][Vue.js]][Vue-url]
--   [![Laravel][Laravel.com]][Laravel-url]
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ### Overview
 
 Project has only two pages in the frontend.
