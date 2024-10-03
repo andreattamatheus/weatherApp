@@ -112,6 +112,26 @@ php artisan serve
 php artisan test
 ```
 
+### Delete job
+
+You can check the schedules jobs:
+
+```
+php artisan schedule:list
+```
+
+If you want to run the command to delete locations older than 3 days, you can try:
+
+```
+php artisan schedule:run
+```
+
+Then run:
+
+```
+php artisan queue:listen
+```
+
 ## Project Frontend
 
 Needs to add to .env the URL to the api.
