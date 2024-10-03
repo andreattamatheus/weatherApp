@@ -2,15 +2,10 @@
 <br />
 <div align="center">
   <a href="https://github.com/andreattamatheus/the-todo-app">
-    <img src="https://to-do-cdn.microsoft.com/static-assets/c87265a87f887380a04cf21925a56539b29364b51ae53e089c3ee2b2180148c6/icons/logo.png" alt="Logo" width="80" height="80">
+    <img src="https://photos5.appleinsider.com/gallery/51141-100995-IMG_2163-xl.jpg" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">The Weather App</h3>
-
-  <p align="center">
-    <br />
-    <a href="https://todolist-app-dusky.vercel.app/">View Demo</a>
-  </p>
 </div>
 
 <!-- TABLE OF CONTENTS -->
@@ -61,17 +56,13 @@ The /login and /home.
 
 This is an example of how to list things you need to use the software and how to install them.
 
--   ```
-    npm install -g node@16.10
-    ```
-
--   ```
-    npm install -g yarn
-    ```
+-   npm 6.14
+-   node 16.10
+-   yarn 1.22
+-   Laravel 11
+-   PHP 8.2
 
 ### Installation
-
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
 
 1. Clone the repo
     ```sh
