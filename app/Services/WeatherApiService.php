@@ -53,7 +53,7 @@ class WeatherApiService
      * @throws \JsonException
      * @throws LocationForecastException
      */
-    public function decodeResponse($response, $endpoint = ''): array
+    public function decodeResponse($response, string $endpoint = ''): array
     {
         $decodedResponse = json_decode($response->body(), true, 512, JSON_THROW_ON_ERROR);
         if ($response->failed()) {
