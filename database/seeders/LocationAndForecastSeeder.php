@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Location;
 use App\Models\LocationForecast;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class LocationAndForecastSeeder extends Seeder
@@ -43,6 +42,7 @@ class LocationAndForecastSeeder extends Seeder
             'min_temperature' => 18,
             'max_temperature' => 28,
             'condition' => 'Clear sky',
+            'icon' => '03n',
         ]);
 
         LocationForecast::query()->create([
@@ -51,6 +51,7 @@ class LocationAndForecastSeeder extends Seeder
             'min_temperature' => 20,
             'max_temperature' => 30,
             'condition' => 'Sunny',
+            'icon' => '03n',
         ]);
 
         // Create forecasts for Location 2
@@ -60,6 +61,7 @@ class LocationAndForecastSeeder extends Seeder
             'min_temperature' => 22,
             'max_temperature' => 32,
             'condition' => 'Cloudy',
+            'icon' => '03n',
         ]);
 
         LocationForecast::query()->create([
@@ -68,6 +70,7 @@ class LocationAndForecastSeeder extends Seeder
             'min_temperature' => 19,
             'max_temperature' => 29,
             'condition' => 'Rainy',
+            'icon' => '03n',
         ]);
 
         // Create forecasts for Location 3 (User 2)
@@ -77,6 +80,7 @@ class LocationAndForecastSeeder extends Seeder
             'min_temperature' => 25,
             'max_temperature' => 35,
             'condition' => 'Sunny',
+            'icon' => '03n',
         ]);
 
         LocationForecast::query()->create([
@@ -85,6 +89,7 @@ class LocationAndForecastSeeder extends Seeder
             'min_temperature' => 24,
             'max_temperature' => 33,
             'condition' => 'Partly cloudy',
+            'icon' => '03n',
         ]);
     }
 }
