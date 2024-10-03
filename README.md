@@ -59,7 +59,7 @@ This is an example of how to list things you need to use the software and how to
 
 1. Clone the repo
     ```sh
-    git clone https://github.com/andreattamatheus/tuneWeatherApp
+    git clone https://github.com/andreattamatheus/turnoWeatherApp
     ```
 2. Install NPM packages
 
@@ -160,7 +160,7 @@ yarn run lint
 
 Matheus - [@andreattamatheus](https://github.com/andreattamatheus)
 
-Project Link: [https://github.com/andreattamatheus/tuneWeatherApp](https://github.com/andreattamatheus/tuneWeatherApp)
+Project Link: [https://github.com/andreattamatheus/turnoWeatherApp](https://github.com/andreattamatheus/turnoWeatherApp)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
