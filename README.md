@@ -35,7 +35,13 @@
 
 ## About The Project
 
-Generic Weather app. So far.
+You will develop a web application using Vue JS (2 or 3), PHP 8+, Laravel 11+, MySQL 8+ or SQLite database. You need to publish on github or other git repository with all instructions to execute your project.
+
+The project will be a Weather App In order to do that, we recommend using Current weather and forecast (free account), but you can choose any API of your choice
+
+An example of call to get the weather for London is http://api.openweathermap.org/data/2.5/forecast?q=London,uk&APPID=YOUR_API_KEY
+
+You don't need to do anything extra than what was asked. Keep in mind that we are evaluating if you code is clean, well structured, good database design, follow industry standards and patterns
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
