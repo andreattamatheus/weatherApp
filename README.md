@@ -73,6 +73,12 @@ This is an example of how to list things you need to use the software and how to
 
 Inside the .env file, you must filled the correct info about your DB.
 
+-   DB_HOST=127.0.0.1
+-   DB_PORT=3306
+-   DB_DATABASE=YOUR_DATABASE
+-   DB_USERNAME=YOUR_USERNAME
+-   DB_PASSWORD=YOUR_PASSWORD
+
 Also, since it has an integration service, you need to fill the:
 
 -   OPENWEATHER_API_KEY with the key generated in OPENWEATHERMAP
