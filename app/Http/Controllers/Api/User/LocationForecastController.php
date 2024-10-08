@@ -6,13 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LocationStoreRequest;
 use App\Services\LocationForecastService;
 use App\Services\WeatherApiService;
+use App\Services\WeatherMapper;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class LocationForecastController extends Controller
 {
     public function __construct(
-        private readonly WeatherApiService $weatherService,
+        private readonly WeatherMapper $weatherMapper,
+        private readonly WeatherApiService $weatherApiService,
         private readonly LocationForecastService $locationForecastService
     ) {}
 
@@ -22,11 +25,11 @@ class LocationForecastController extends Controller
             $city = $request->get('city');
             $state = $request->get('state');
 
-            $response = $this->weatherService->getWeatherForecast($city, $state);
+            $response = $this->weatherApiService->getWeatherForecast($city, $state);
             if (!$response) {
                 return response()->json($response, Response::HTTP_NOT_FOUND);
             }
-            $data = $this->locationForecastService->getMostRecentForecast($response);
+            $data = $this->weatherMapper->getMostRecentForecast($response);
 
             return response()->json([
                 'success' => true,
@@ -44,7 +47,7 @@ class LocationForecastController extends Controller
     public function store(LocationStoreRequest $request): ?JsonResponse
     {
         try {
-            $user = auth()->id();
+            $user = $request->user();
             $weatherData = $request->get('weatherData');
             $city = $weatherData['city'];
             $state = $weatherData['state'];
@@ -70,10 +73,11 @@ class LocationForecastController extends Controller
      *
      * @return JsonResponse|null
      */
-    public function destroy(string $locationId, string $date): ?\Illuminate\Http\JsonResponse
+    public function destroy(Request $request, string $locationId, string $date): ?\Illuminate\Http\JsonResponse
     {
         try {
-            $this->locationForecastService->deleteLocation($locationId, $date);
+            $user = $request->user();
+            $this->locationForecastService->deleteLocation($locationId, $date, $user);
 
             return response()->json([
                 'success' => true,

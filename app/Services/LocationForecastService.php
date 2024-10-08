@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exceptions\LocationForecastException;
 use App\Models\Location;
 use App\Models\LocationForecast;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -50,33 +51,17 @@ class LocationForecastService
     /**
      * @throws \Exception
      */
-    public function deleteLocation(int $locationId, string $date): void
+    public function deleteLocation(int $locationId, string $date, User $user): void
     {
         try {
             $dateParsed = Carbon::parse($date)->format('Y-d-m');
-            DB::transaction(static function () use ($locationId, $dateParsed) {
-                $location = auth()->user()->locations()->findOrFail($locationId);
+            DB::transaction(static function () use ($locationId, $dateParsed, $user) {
+                $location = $user->locations()->findOrFail($locationId);
                 $location->forecasts()->where('date', $dateParsed)->delete();
             });
         } catch (\Throwable $th) {
             \Log::error('Error deleting location: ' . $th->getMessage());
             throw new LocationForecastException('An error occurred while deleting the location.');
         }
-    }
-
-    public function getMostRecentForecast(array $response): array
-    {
-        $mostRecentForecast = $response['data']['list'][count($response['data']['list']) - 1];
-        $cityData = $response['data']['city'];
-
-        return [
-            'date' => Carbon::parse($mostRecentForecast['dt'])->format('Y-d-m'),
-            'min_temperature' => $mostRecentForecast['main']['temp_min'],
-            'max_temperature' => $mostRecentForecast['main']['temp_max'],
-            'condition' => $mostRecentForecast['weather'][0]['description'],
-            'icon' => $mostRecentForecast['weather'][0]['icon'],
-            'city' => $cityData['name'],
-            'state' => $cityData['country'],
-        ];
     }
 }
