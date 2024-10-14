@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DataTransferObjects\WeatherApiResponseData;
 use App\Models\LocationForecast;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -35,19 +36,19 @@ final class WeatherMapper
         ];
     }
 
-    public function getMostRecentForecast(array $response): array
+    public function getMostRecentForecast($weatherData): array
     {
-        $mostRecentForecast = $response['data']['list'][count($response['data']['list']) - 1];
-        $cityData = $response['data']['city'];
+        $mostRecentForecast = $weatherData->list[0];
+        $cityData = $weatherData->city;
 
         return [
-            'date' => Carbon::parse($mostRecentForecast['dt'])->format('Y-d-m'),
-            'min_temperature' => $mostRecentForecast['main']['temp_min'],
-            'max_temperature' => $mostRecentForecast['main']['temp_max'],
-            'condition' => $mostRecentForecast['weather'][0]['description'],
-            'icon' => $mostRecentForecast['weather'][0]['icon'],
-            'city' => $cityData['name'],
-            'state' => $cityData['country'],
+            'date' => $mostRecentForecast->dt_txt,
+            'min_temperature' => $mostRecentForecast->main->temp_min,
+            'max_temperature' => $mostRecentForecast->main->temp_max,
+            'condition' => $mostRecentForecast->weather[0]->description,
+            'icon' => $mostRecentForecast->weather[0]->icon,
+            'city' => $cityData->name,
+            'state' => $cityData->country,
         ];
     }
 }

@@ -36,10 +36,9 @@ class LocationForecastController extends Controller
                 'data' => $data
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
-
             return response()->json([
                 'success' => false,
-                'message' => 'Error fetching forecast',
+                'message' => $e->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

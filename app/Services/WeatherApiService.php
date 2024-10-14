@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
+use App\DataTransferObjects\WeatherApi\WeatherApiResponseData;
 use App\Exceptions\LocationForecastException;
 use Illuminate\Http\Client\RequestException;
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
 class WeatherApiService
@@ -77,15 +77,17 @@ class WeatherApiService
      *
      * @param string $city
      * @param string $state
-     * @return array
+     * @return WeatherApiResponseData
      */
-    public function getWeatherForecast(string $city, string $state): array
+    public function getWeatherForecast(string $city, string $state): WeatherApiResponseData
     {
         $params = [
             'q' => $city . ',' . $state,
             'units' => 'metric'
         ];
 
-        return $this->sendRequest('forecast', $params);
+        $response = $this->sendRequest('forecast', $params);
+
+        return WeatherApiResponseData::from($response['data']);
     }
 }
