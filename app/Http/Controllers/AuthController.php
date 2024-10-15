@@ -11,15 +11,13 @@ class AuthController extends Controller
 {
     /**
      * Get a JWT via given credentials.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function login(AuthLoginRequest $request): \Illuminate\Http\JsonResponse
     {
-        if (!auth()->attempt($request->only('email', 'password'))) {
+        if (! auth()->attempt($request->only('email', 'password'))) {
             return response()->json([
                 'success' => false,
-                'message' => 'Password is incorrect'
+                'message' => 'Password is incorrect',
             ], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -41,17 +39,15 @@ class AuthController extends Controller
     public function logout()
     {
         auth()->logout();
+
         return response()->json([
             'success' => true,
-            'message' => 'User logged out successfully'
+            'message' => 'User logged out successfully',
         ], Response::HTTP_OK);
     }
 
-
     /**
      * Get the authenticated User.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function me(Request $request): \Illuminate\Http\JsonResponse
     {

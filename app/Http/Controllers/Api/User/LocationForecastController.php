@@ -26,14 +26,14 @@ class LocationForecastController extends Controller
             $state = $request->get('state');
 
             $response = $this->weatherApiService->getWeatherForecast($city, $state);
-            if (!$response) {
+            if (! $response) {
                 return response()->json($response, Response::HTTP_NOT_FOUND);
             }
             $data = $this->weatherMapper->getMostRecentForecast($response);
 
             return response()->json([
                 'success' => true,
-                'data' => $data
+                'data' => $data,
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json([
@@ -56,7 +56,7 @@ class LocationForecastController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Location saved successfully!'
+                'message' => 'Location saved successfully!',
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
 
@@ -69,8 +69,6 @@ class LocationForecastController extends Controller
 
     /**
      * Delete a weather location.
-     *
-     * @return JsonResponse|null
      */
     public function destroy(Request $request, string $locationId, string $date): ?\Illuminate\Http\JsonResponse
     {
@@ -80,7 +78,7 @@ class LocationForecastController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Location deleted successfully!'
+                'message' => 'Location deleted successfully!',
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
 

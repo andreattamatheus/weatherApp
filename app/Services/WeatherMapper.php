@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\DataTransferObjects\WeatherApiResponseData;
 use App\Models\LocationForecast;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;

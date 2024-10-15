@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LocationResource;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -24,7 +23,7 @@ class UserController extends Controller
                 'data' => LocationResource::collection($locations),
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
-            \Log::error('Error fetching user locations: ' . $e->getMessage());
+            \Log::error('Error fetching user locations: '.$e->getMessage());
 
             return response()->json([
                 'success' => false,

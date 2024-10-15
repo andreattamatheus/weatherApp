@@ -14,7 +14,7 @@ class LocationResource extends JsonResource
      */
     public function toArray($request)
     {
-        $weatherMapper = new WeatherMapper();
+        $weatherMapper = new WeatherMapper;
 
         return $weatherMapper->mapLocation([
             'id' => $this->id,

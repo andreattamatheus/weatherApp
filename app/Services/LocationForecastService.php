@@ -22,12 +22,12 @@ class LocationForecastService
                         'min_temperature' => $weatherData['min_temperature'],
                         'max_temperature' => $weatherData['max_temperature'],
                         'condition' => $weatherData['condition'],
-                        'icon' => $weatherData['icon']
+                        'icon' => $weatherData['icon'],
                     ]
                 );
             });
         } catch (\Throwable $th) {
-            \Log::error('Error creating location: ' . $th->getMessage());
+            \Log::error('Error creating location: '.$th->getMessage());
             throw new LocationForecastException($th->getMessage());
         }
     }
@@ -43,7 +43,7 @@ class LocationForecastService
                 ]);
             });
         } catch (\Throwable $th) {
-            \Log::error('Error creating location: ' . $th->getMessage());
+            \Log::error('Error creating location: '.$th->getMessage());
             throw new LocationForecastException('An error occurred while saving the location.');
         }
     }
@@ -60,7 +60,7 @@ class LocationForecastService
                 $location->forecasts()->where('date', $dateParsed)->delete();
             });
         } catch (\Throwable $th) {
-            \Log::error('Error deleting location: ' . $th->getMessage());
+            \Log::error('Error deleting location: '.$th->getMessage());
             throw new LocationForecastException('An error occurred while deleting the location.');
         }
     }

@@ -13,7 +13,7 @@ class WeatherApiServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->weatherApiService = new WeatherApiService();
+        $this->weatherApiService = new WeatherApiService;
     }
 
     public function test_it_can_fetch_weather_forecast_successfully(): void
@@ -27,9 +27,9 @@ class WeatherApiServiceTest extends TestCase
                             'main' => ['temp_min' => 10, 'temp_max' => 15],
                             'weather' => [['description' => 'clear sky', 'icon' => '01d']],
                             'dt' => now()->timestamp,
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ], 200),
         ]);
 
@@ -42,7 +42,7 @@ class WeatherApiServiceTest extends TestCase
     {
         Http::fake([
             '*' => Http::response([
-                'message' => 'City not found'
+                'message' => 'City not found',
             ], 404),
         ]);
 
