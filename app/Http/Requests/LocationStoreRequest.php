@@ -28,7 +28,7 @@ class LocationStoreRequest extends FormRequest
     public function failedValidation(Validator $validator): HttpResponseException
     {
         throw new HttpResponseException(response()->json([
-            'data' => $validator->errors(),
+            'errors' => $validator->errors(),
         ], Response::HTTP_UNPROCESSABLE_ENTITY));
     }
 }
