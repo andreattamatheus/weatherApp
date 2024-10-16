@@ -18,7 +18,6 @@ class LocationForecastService
     {
         try {
             $location = $this->createLocation($request);
-            dd($location);
             $this->createLocationForecast($location, $request);
         } catch (\Throwable $th) {
             \Log::error('Error saving location: ' . $th->getMessage());
