@@ -20,7 +20,6 @@ class LocationResource extends JsonResource
         $this->forecasts = $resource->forecasts;
     }
 
-
     /**
      * Transform the resource into an array.
      *

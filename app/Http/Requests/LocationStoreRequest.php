@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Symfony\Component\HttpFoundation\Response;
 
 class LocationStoreRequest extends FormRequest
 {
@@ -16,16 +17,18 @@ class LocationStoreRequest extends FormRequest
         return [
             'city' => 'required|string|max:255',
             'state' => 'required|string|max:255',
-            'weatherData' => 'required|array:date,min_temperature,max_temperature,condition,icon',
+            'date' => 'required|string',
+            'min_temperature' => 'required|string',
+            'max_temperature' => 'required|string|gt:min_temperature',
+            'condition' => 'required|string',
+
         ];
     }
 
-    public function failedValidation(Validator $validator): void
+    public function failedValidation(Validator $validator): HttpResponseException
     {
         throw new HttpResponseException(response()->json([
-            'success' => false,
-            'message' => 'Validation errors',
             'data' => $validator->errors(),
-        ]));
+        ], Response::HTTP_UNPROCESSABLE_ENTITY));
     }
 }

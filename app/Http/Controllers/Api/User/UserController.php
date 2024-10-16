@@ -35,7 +35,7 @@ class UserController extends Controller
 
             return LocationResource::collection($userLocations);
         } catch (\Exception $e) {
-            \Log::error('Error fetching user locations: '.$e->getMessage());
+            logger()->channel('daily')->error('Error getUserLocations locations: ' . $e->getMessage());
 
             return response()->json([
                 'message' => 'Error fetching user locations',
@@ -52,7 +52,7 @@ class UserController extends Controller
                 'message' => 'Location saved successfully!',
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
-            \Log::error('Error saving user locations: '.$e->getMessage());
+            logger()->channel('daily')->error('Error saving user locations: ' . $e->getMessage());
 
             return response()->json([
                 'message' => 'Error saving user location',
@@ -73,7 +73,7 @@ class UserController extends Controller
                 'message' => 'Location deleted successfully!',
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
-            \Log::error('Error fetching forecast: '.$e->getMessage());
+            logger()->channel('daily')->error('Error destroy user locations: ' . $e->getMessage());
 
             return response()->json([
                 'message' => 'Error deleting user location',

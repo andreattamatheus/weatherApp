@@ -21,7 +21,7 @@ class LocationForecastController extends Controller
 
             return MostRecentForecastResource::make($data);
         } catch (\Exception $e) {
-            \Log::error('Error fetching forecast: '.$e->getMessage());
+            logger()->channel('daily')->error('Error get locations: ' . $e->getMessage());
 
             return response()->json([
                 'message' => 'Error fetching most recent forecast',
