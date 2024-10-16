@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class LocationForecastService
@@ -20,7 +21,7 @@ class LocationForecastService
             $location = $this->createLocation($request);
             $this->createLocationForecast($location, $request);
         } catch (\Throwable $th) {
-            \Log::error('Error saving location: '.$th->getMessage());
+            Log::error('Error saving location: ' . $th->getMessage());
             throw new LocationForecastException('An error occurred while saving the location.');
         }
     }
@@ -75,7 +76,7 @@ class LocationForecastService
                 'message' => 'Location deleted successfully!',
             ], Response::HTTP_OK);
         } catch (\Throwable $th) {
-            \Log::error('Error deleting location: '.$th->getMessage());
+            Log::error('Error deleting location: ' . $th->getMessage());
             throw new LocationForecastException('An error occurred while deleting the location.');
         }
     }
