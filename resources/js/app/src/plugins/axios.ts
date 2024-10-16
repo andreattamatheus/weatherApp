@@ -4,13 +4,14 @@ import axios from "axios";
 import type { App } from "vue";
 
 interface AxiosOptions {
-  baseUrl?: string;
+    baseUrl?: string;
 }
 
 export default {
-  install: (app: App, options: AxiosOptions) => {
-    app.config.globalProperties.$axios = axios.create({
-      baseURL: options.baseUrl,
-    });
-  },
+    install: (app: App, options: AxiosOptions) => {
+        app.config.globalProperties.$axios = axios.create({
+            baseURL: options.baseUrl,
+            withCredentials: true,
+        });
+    },
 };

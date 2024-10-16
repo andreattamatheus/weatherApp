@@ -49,7 +49,7 @@ class AuthController extends Controller
     /**
      * Get the authenticated User.
      */
-    public function me(Request $request): \Illuminate\Http\JsonResponse
+    public function me(Request $request): User
     {
         return $request->user();
     }

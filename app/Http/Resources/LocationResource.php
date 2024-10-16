@@ -7,6 +7,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class LocationResource extends JsonResource
 {
+    // public int $id;
+    // public string $city;
+    // public array $forecasts;
+
     /**
      * Transform the resource into an array.
      *

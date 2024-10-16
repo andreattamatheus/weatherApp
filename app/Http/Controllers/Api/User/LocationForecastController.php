@@ -26,7 +26,7 @@ class LocationForecastController extends Controller
             $state = $request->get('state');
 
             $response = $this->weatherApiService->getWeatherForecast($city, $state);
-            if (! $response) {
+            if (!$response) {
                 return response()->json($response, Response::HTTP_NOT_FOUND);
             }
             $data = $this->weatherMapper->getMostRecentForecast($response);
@@ -52,6 +52,12 @@ class LocationForecastController extends Controller
             $state = $weatherData['state'];
 
             $location = $this->locationForecastService->createLocation($user, $city, $state);
+            if (!$location) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error saving location',
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
             $this->locationForecastService->createLocationForecast($location, $weatherData);
 
             return response()->json([
