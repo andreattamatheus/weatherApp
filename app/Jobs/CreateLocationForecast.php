@@ -16,9 +16,9 @@ class CreateLocationForecast implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected array $weatherData;
+    public array $weatherData;
 
-    protected User $user;
+    public User $user;
 
     /**
      * Create a new job instance.
