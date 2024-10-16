@@ -18,7 +18,6 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('get-location-forecast', [LocationForecastController::class, 'get']);
         Route::prefix('users')->group(function () {
-            Route::get('', [UserController::class, 'index']);
             Route::get('/locations', [UserController::class, 'getUserLocations']);
             Route::post('/locations', [LocationForecastController::class, 'store']);
             Route::delete('/locations/{id}/{date}', [LocationForecastController::class, 'destroy']);

@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 
 final class WeatherMapper
 {
-    public function mapLocation(array $apiResponse)
+    public function mapLocation(array $apiResponse): array
     {
         return [
             'id' => $apiResponse['id'],
@@ -17,14 +17,14 @@ final class WeatherMapper
         ];
     }
 
-    public function mapForecasts(Collection $forecasts)
+    public function mapForecasts(Collection $forecasts): array
     {
         return $forecasts->map(function ($forecast) {
             return $this->mapForecast($forecast);
         })->toArray();
     }
 
-    public function mapForecast(LocationForecast $forecast)
+    public function mapForecast(LocationForecast $forecast): array
     {
         return [
             'date' => Carbon::parse($forecast['date'])->format('Y-d-m'),
@@ -35,8 +35,10 @@ final class WeatherMapper
         ];
     }
 
-    public function getMostRecentForecast($weatherData): array
+    public function getMostRecentForecast($request): array
     {
+        $weatherApiService = new WeatherApiService();
+        $weatherData = $weatherApiService->getWeatherForecast($request);
         $mostRecentForecast = $weatherData->list[0];
         $cityData = $weatherData->city;
 

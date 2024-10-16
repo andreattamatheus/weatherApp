@@ -8,46 +8,55 @@ use App\Models\LocationForecast;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class LocationForecastService
 {
-    public function createLocationForecast(Location $location, array $weatherData): LocationForecast
+    public function store(Request $request)
     {
         try {
-            return DB::transaction(static function () use ($weatherData, $location) {
-                return LocationForecast::query()->updateOrCreate(
-                    ['location_id' => $location->id],
-                    [
-                        'date' => Carbon::parse($weatherData['date'])->format('Y-d-m'),
-                        'min_temperature' => $weatherData['min_temperature'],
-                        'max_temperature' => $weatherData['max_temperature'],
-                        'condition' => $weatherData['condition'],
-                        'icon' => $weatherData['icon'],
-                    ]
-                );
-            });
+            $location = $this->createLocation($request);
+            dd($location);
+            $this->createLocationForecast($location, $request);
         } catch (\Throwable $th) {
-            \Log::error('Error creating location: ' . $th->getMessage());
-            throw new LocationForecastException($th->getMessage());
+            \Log::error('Error saving location: ' . $th->getMessage());
+            throw new LocationForecastException('An error occurred while saving the location.');
         }
     }
 
-    public function createLocation(string $userId, string $city, string $state): Location
+    public function createLocation(Request $request): Location
     {
-        try {
-            return DB::transaction(function () use ($userId, $city, $state) {
-                return Location::query()->updateOrCreate([
-                    'user_id' => $userId,
-                    'city' => $city,
-                    'state' => $state,
-                ]);
-            });
-        } catch (\Throwable $th) {
-            \Log::error('Error creating location: ' . $th->getMessage());
-            throw new LocationForecastException('An error occurred while saving the location.');
-        }
+        $userId = $request->user()->id;
+        $city = $request->get('city');
+        $state = $request->get('state');
+
+        return DB::transaction(function () use ($userId, $city, $state) {
+            return Location::query()->updateOrCreate([
+                'user_id' => $userId,
+                'city' => $city,
+                'state' => $state,
+            ]);
+        });
+    }
+
+    public function createLocationForecast(Location $location, Request $request): LocationForecast
+    {
+        $weatherData = $request->get('weatherData');
+
+        return DB::transaction(static function () use ($weatherData, $location) {
+            return LocationForecast::query()->updateOrCreate(
+                ['location_id' => $location->id],
+                [
+                    'date' => Carbon::parse($weatherData['date'])->format('Y-d-m'),
+                    'min_temperature' => $weatherData['min_temperature'],
+                    'max_temperature' => $weatherData['max_temperature'],
+                    'condition' => $weatherData['condition'],
+                    'icon' => $weatherData['icon'],
+                ]
+            );
+        });
     }
 
     /**
