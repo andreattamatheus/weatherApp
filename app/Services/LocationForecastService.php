@@ -16,27 +16,28 @@ class LocationForecastService
     /**
      * Store the location forecast data.
      *
-     * @param \Illuminate\Http\Request $request The request instance containing the data to be stored.
+     *
      * @return \Illuminate\Http\Response The response instance indicating the result of the store operation.
      */
-    public function store(Request $request)
+    public function store(array $weatherData, User $user): void
     {
-        $location = $this->createLocation($request);
-        $this->createLocationForecast($location, $request);
+        $weatherData = ForecastResource::make($weatherData);
+        $location = $this->createLocation($weatherData, $user);
+        $this->createLocationForecast($location, $weatherData);
     }
 
     /**
      * Creates a new location based on the provided request data.
      *
-     * @param Request $request The request object containing location data.
+     * @param Request $weatherData The request object containing location data.
      * @return Location The newly created location instance.
      */
-    public function createLocation(Request $request): Location
+    public function createLocation(ForecastResource $weatherData, User $user): Location
     {
         try {
-            $userId = $request->user()->id;
-            $city = $request->get('city');
-            $state = $request->get('state');
+            $userId = $user->id;
+            $city = $weatherData->city;
+            $state = $weatherData->state;
 
             return DB::transaction(function () use ($userId, $city, $state) {
                 return Location::query()->updateOrCreate([
@@ -54,13 +55,13 @@ class LocationForecastService
      * Creates a location forecast based on the provided location and request data.
      *
      * @param Location $location The location for which the forecast is to be created.
-     * @param Request $request The request containing the forecast data.
+     * @param Request $weatherData The request containing the forecast data.
      * @return void
      */
-    public function createLocationForecast(Location $location, Request $request): void
+    public function createLocationForecast(Location $location, ForecastResource $weatherData): void
     {
         try {
-            $weatherData = ForecastResource::make($request);
+            $weatherData = ForecastResource::make($weatherData);
 
             DB::transaction(static function () use ($weatherData, $location) {
                 LocationForecast::query()->updateOrCreate(
@@ -104,14 +105,14 @@ class LocationForecastService
     /**
      * Retrieves the most recent weather forecast based on the provided request.
      *
-     * @param \Illuminate\Http\Request $request The request object containing necessary parameters.
+     * @param \Illuminate\Http\Request $weatherData The request object containing necessary parameters.
      * @return array An array containing the most recent forecast data.
      */
-    public function getMostRecentForecast($request): array
+    public function getMostRecentForecast($weatherData): array
     {
         try {
             $weatherApiService = new WeatherApiService;
-            $weatherData = $weatherApiService->getWeatherForecast($request);
+            $weatherData = $weatherApiService->getWeatherForecast($weatherData);
             $mostRecentForecast = $weatherData->list[0];
             $cityData = $weatherData->city;
 

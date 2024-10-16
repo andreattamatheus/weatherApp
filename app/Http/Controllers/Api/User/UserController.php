@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LocationStoreRequest;
+use App\Http\Resources\ForecastResource;
 use App\Http\Resources\LocationResource;
+use App\Jobs\CreateLocationForecast;
 use App\Services\LocationForecastService;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
@@ -46,7 +48,8 @@ class UserController extends Controller
     public function store(LocationStoreRequest $request): ?JsonResponse
     {
         try {
-            $this->locationForecastService->store($request);
+            $weatherData = ForecastResource::make($request->all())->resolve();
+            CreateLocationForecast::dispatch($weatherData, $request->user());
 
             return response()->json([
                 'message' => 'Location saved successfully!',

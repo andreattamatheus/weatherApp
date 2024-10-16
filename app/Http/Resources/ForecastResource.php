@@ -15,14 +15,20 @@ class ForecastResource extends JsonResource
 
     public string $condition;
 
+    public string $city;
+
+    public string $state;
+
 
     public function __construct($resource)
     {
         parent::__construct($resource);
-        $this->date = $resource->date;
-        $this->min_temperature = $resource->min_temperature;
-        $this->max_temperature = $resource->max_temperature;
-        $this->condition = $resource->condition;
+        $this->date = $resource['date'];
+        $this->min_temperature = $resource['min_temperature'];
+        $this->max_temperature = $resource['max_temperature'];
+        $this->condition = $resource['condition'];
+        $this->city = $resource['city'];
+        $this->state = $resource['state'];
     }
 
     /**
@@ -37,6 +43,8 @@ class ForecastResource extends JsonResource
             'min_temperature' => $this->min_temperature,
             'max_temperature' => $this->max_temperature,
             'condition' => $this->condition,
+            'city' => $this->city,
+            'state' => $this->state,
         ];
     }
 }
