@@ -8,9 +8,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class ForecastResource extends JsonResource
 {
     public string $date;
+
     public string $min_temperature;
+
     public string $max_temperature;
+
     public string $condition;
+
     public string $icon;
 
     /**

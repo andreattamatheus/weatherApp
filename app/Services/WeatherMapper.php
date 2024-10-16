@@ -37,7 +37,7 @@ final class WeatherMapper
 
     public function getMostRecentForecast($request): array
     {
-        $weatherApiService = new WeatherApiService();
+        $weatherApiService = new WeatherApiService;
         $weatherData = $weatherApiService->getWeatherForecast($request);
         $mostRecentForecast = $weatherData->list[0];
         $cityData = $weatherData->city;

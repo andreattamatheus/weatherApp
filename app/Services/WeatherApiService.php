@@ -30,11 +30,11 @@ class WeatherApiService
             $method = strtolower($method);
             $params = array_merge($this->params, $params);
             $response = Http::acceptJson()
-                ->$method($this->baseUri . $endpoint, $params);
+                ->$method($this->baseUri.$endpoint, $params);
 
             return $this->decodeResponse($response, $endpoint);
-        } catch (RequestException | \JsonException $e) {
-            logger()->channel('weather-api')->error('[Open Weather API - Request] - ' . $endpoint, [
+        } catch (RequestException|\JsonException $e) {
+            logger()->channel('weather-api')->error('[Open Weather API - Request] - '.$endpoint, [
                 'PID' => getmypid(),
                 'message' => $e->getMessage(),
             ]);
@@ -51,14 +51,14 @@ class WeatherApiService
     {
         $decodedResponse = json_decode($response->body(), true, 512, JSON_THROW_ON_ERROR);
         if ($response->failed()) {
-            logger()->channel('weather-api')->error('[Open Weather API - Response] - ' . $endpoint, [
+            logger()->channel('weather-api')->error('[Open Weather API - Response] - '.$endpoint, [
                 'PID' => getmypid(),
                 'response' => $decodedResponse,
             ]);
 
             return ['success' => false, 'message' => 'An error occurred while fetching the weather forecast.'];
         }
-        logger()->channel('weather-api')->info('[Open Weather API - Response] - ' . $endpoint, [
+        logger()->channel('weather-api')->info('[Open Weather API - Response] - '.$endpoint, [
             'PID' => getmypid(),
             'response' => $decodedResponse,
         ]);
@@ -75,7 +75,7 @@ class WeatherApiService
         $state = $request->get('state');
 
         $params = [
-            'q' => $city . ',' . $state,
+            'q' => $city.','.$state,
             'units' => 'metric',
         ];
 

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\LocationResource;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +21,7 @@ class UserController extends Controller
     /**
      * Retrieve the locations associated with the authenticated user.
      *
-     * @param \Illuminate\Http\Request $request The incoming HTTP request.
+     * @param  \Illuminate\Http\Request  $request  The incoming HTTP request.
      * @return \Illuminate\Http\JsonResponse|null The JSON response containing user locations or null if not found.
      */
     public function getUserLocations(Request $request): ?\Illuminate\Http\JsonResponse
@@ -36,7 +35,7 @@ class UserController extends Controller
                 'data' => $userLocations,
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
-            \Log::error('Error fetching user locations: ' . $e->getMessage());
+            \Log::error('Error fetching user locations: '.$e->getMessage());
 
             return response()->json([
                 'success' => false,

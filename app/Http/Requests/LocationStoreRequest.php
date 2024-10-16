@@ -16,7 +16,7 @@ class LocationStoreRequest extends FormRequest
         return [
             'city' => 'required|string|max:255',
             'state' => 'required|string|max:255',
-            'weatherData' => 'required|array:date,min_temperature,max_temperature,condition,icon'
+            'weatherData' => 'required|array:date,min_temperature,max_temperature,condition,icon',
         ];
     }
 

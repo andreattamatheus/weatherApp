@@ -20,7 +20,7 @@ class LocationForecastService
             $location = $this->createLocation($request);
             $this->createLocationForecast($location, $request);
         } catch (\Throwable $th) {
-            \Log::error('Error saving location: ' . $th->getMessage());
+            \Log::error('Error saving location: '.$th->getMessage());
             throw new LocationForecastException('An error occurred while saving the location.');
         }
     }
@@ -69,12 +69,13 @@ class LocationForecastService
                 $location = $user->locations()->findOrFail($locationId);
                 $location->forecasts()->where('date', $dateParsed)->delete();
             });
+
             return response()->json([
                 'success' => true,
                 'message' => 'Location deleted successfully!',
             ], Response::HTTP_OK);
         } catch (\Throwable $th) {
-            \Log::error('Error deleting location: ' . $th->getMessage());
+            \Log::error('Error deleting location: '.$th->getMessage());
             throw new LocationForecastException('An error occurred while deleting the location.');
         }
     }

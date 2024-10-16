@@ -2,9 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\User;
 use App\Http\Resources\LocationResource;
-
+use App\Models\User;
 
 class UserService
 {
