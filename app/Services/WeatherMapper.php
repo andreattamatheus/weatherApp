@@ -34,22 +34,4 @@ final class WeatherMapper
             'icon' => $forecast['icon'],
         ];
     }
-
-    public function getMostRecentForecast($request): array
-    {
-        $weatherApiService = new WeatherApiService;
-        $weatherData = $weatherApiService->getWeatherForecast($request);
-        $mostRecentForecast = $weatherData->list[0];
-        $cityData = $weatherData->city;
-
-        return [
-            'date' => $mostRecentForecast->dt_txt,
-            'min_temperature' => $mostRecentForecast->main->temp_min,
-            'max_temperature' => $mostRecentForecast->main->temp_max,
-            'condition' => $mostRecentForecast->weather[0]->description,
-            'icon' => $mostRecentForecast->weather[0]->icon,
-            'city' => $cityData->name,
-            'state' => $cityData->country,
-        ];
-    }
 }

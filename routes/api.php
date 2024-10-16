@@ -19,8 +19,8 @@ Route::prefix('v1')->group(function () {
         Route::get('get-location-forecast', [LocationForecastController::class, 'get']);
         Route::prefix('users')->group(function () {
             Route::get('/locations', [UserController::class, 'getUserLocations']);
-            Route::post('/locations', [LocationForecastController::class, 'store']);
-            Route::delete('/locations/{id}/{date}', [LocationForecastController::class, 'destroy']);
+            Route::post('/locations', [UserController::class, 'store']);
+            Route::delete('/locations/{id}/{date}', [UserController::class, 'destroy']);
         });
     });
 });
