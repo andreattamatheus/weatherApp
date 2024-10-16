@@ -98,6 +98,18 @@ php artisan migrate:fresh --seed
 php artisan serve
 ```
 
+### Pint
+
+```
+ ./vendor/bin/pint
+```
+
+### PHPStan
+
+```
+ ./vendor/bin/phpstan analyse
+```
+
 ### Test
 
 ```
