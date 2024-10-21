@@ -33,7 +33,7 @@ class UserController extends Controller
     public function getUserLocations(Request $request): mixed
     {
         try {
-            $userLocations = $this->userService->getUserLocations($request->user());
+            $userLocations = $this->userService->getUserLocations($request);
 
             return LocationResource::collection($userLocations);
         } catch (\Exception $e) {
@@ -48,7 +48,7 @@ class UserController extends Controller
     public function store(LocationStoreRequest $request): ?JsonResponse
     {
         try {
-            $weatherData = ForecastResource::make($request->all())->resolve();
+            $weatherData = ForecastResource::make($request->validated())->resolve();
             CreateLocationForecast::dispatch($weatherData, $request->user());
 
             return response()->json([
@@ -72,9 +72,7 @@ class UserController extends Controller
             $user = $request->user();
             $this->locationForecastService->deleteLocation($locationId, $date, $user);
 
-            return response()->json([
-                'message' => 'Location deleted successfully!',
-            ], Response::HTTP_OK);
+            return response()->json(null, Response::HTTP_NO_CONTENT);
         } catch (\Exception $e) {
             logger()->channel('daily')->error('Error destroy user locations: ' . $e->getMessage());
 
