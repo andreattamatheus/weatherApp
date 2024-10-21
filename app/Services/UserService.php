@@ -16,7 +16,6 @@ class UserService
                 $query->select('id', 'location_id', 'date', 'min_temperature', 'max_temperature', 'condition', 'icon');
             }])->get(['id', 'city', 'state', 'created_at']);
         } catch (\Throwable $th) {
-            \Log::error('Error getting user locations: '.$th->getMessage());
             throw new Exception('An error occurred while getting user locations.');
         }
     }

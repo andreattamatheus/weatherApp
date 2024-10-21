@@ -41,8 +41,6 @@ The project will be a Weather App In order to do that, we recommend using Curren
 
 An example of call to get the weather for London is http://api.openweathermap.org/data/2.5/forecast?q=London,uk&APPID=YOUR_API_KEY
 
-You don't need to do anything extra than what was asked. Keep in mind that we are evaluating if you code is clean, well structured, good database design, follow industry standards and patterns
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Prerequisites
