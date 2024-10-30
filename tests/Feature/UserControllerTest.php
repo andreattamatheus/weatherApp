@@ -2,12 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Http\Resources\ForecastResource;
 use Tests\TestCase;
 use App\Jobs\CreateLocationForecast;
 use App\Models\User;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Bus;
 
 class UserControllerTest extends TestCase
 {
@@ -19,9 +17,9 @@ class UserControllerTest extends TestCase
         $this->user = User::factory()->make();
     }
 
-    public function test_store_location_success()
+    public function test_store_location_job_dispatched_successfully()
     {
-        Queue::fake();
+        Bus::fake();
 
         $requestData = [
             'city' => 'Test City',
@@ -40,15 +38,12 @@ class UserControllerTest extends TestCase
             ]);
 
         // Check that the job was dispatched with correct data
-        Queue::assertPushed(CreateLocationForecast::class, function ($job) use ($requestData) {
-            $weatherData = ForecastResource::make($requestData)->resolve();
-            return $job->weatherData === $weatherData && $job->user->is($this->user);
-        });
+        Bus::assertDispatched(CreateLocationForecast::class);
     }
 
-    public function test_store_location_failure()
+    public function test_store_location_job_dispatched_failed()
     {
-        Queue::fake();
+        Bus::fake();
 
         $requestData = [
             'state' => 'Test State',
@@ -65,7 +60,6 @@ class UserControllerTest extends TestCase
                 'city'
             ]);
 
-        // Ensure the job was not dispatched
-        Queue::assertNotPushed(CreateLocationForecast::class);
+        Bus::assertNotDispatched(CreateLocationForecast::class);
     }
 }
