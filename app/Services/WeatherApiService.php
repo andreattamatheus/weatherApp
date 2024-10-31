@@ -5,7 +5,6 @@ namespace App\Services;
 use App\DataTransferObjects\WeatherApi\WeatherApiResponseData;
 use App\Exceptions\LocationForecastException;
 use Illuminate\Http\Client\RequestException;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class WeatherApiService

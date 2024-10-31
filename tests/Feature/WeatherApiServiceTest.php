@@ -6,6 +6,8 @@ use App\DataTransferObjects\WeatherApi\WeatherApiResponseData;
 use App\Models\User;
 use App\Services\LocationForecastService;
 use App\Services\WeatherApiService;
+use Illuminate\Support\Facades\Request;
+use Mockery;
 use Tests\TestCase;
 
 class WeatherApiServiceTest extends TestCase
@@ -91,6 +93,34 @@ class WeatherApiServiceTest extends TestCase
                 "state",
             ],
         ]);
+    }
+
+    public function test_fetch_weather_forecast_has_incorrect_return_format(): void
+    {
+        $responseFromApiSample = json_decode(
+            file_get_contents(__DIR__ . '/../Stubs/WeatherApiResponse.json'),
+            true
+        );
+
+        $dataForDTO = [
+            'list' => $responseFromApiSample['response']['list'],
+            'state' => $responseFromApiSample['response']['city']
+        ];
+
+        $this->mock(LocationForecastService::class)
+            ->shouldReceive('getMostRecentForecast')
+            ->with(Mockery::any(), Mockery::any())
+            ->once()
+            ->andReturn(
+                WeatherApiResponseData::from($dataForDTO)
+            );
+
+        $response = $this->actingAs($this->user, 'sanctum')->call('GET', '/api/v1/get-location-forecast', [
+            'city' => 'London',
+            'state' => 'UK',
+        ]);
+
+        $response->assertStatus(500);
     }
 
     // public function test_it_returns_error_on_failed_request(): void
