@@ -18,9 +18,6 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
 
-      - name: Generate application key
-        run: php artisan key:generate
-
       - name: Run migrations
         env:
           DB_CONNECTION: sqlite
