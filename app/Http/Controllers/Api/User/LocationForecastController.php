@@ -6,18 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LocationGetRequest;
 use App\Http\Resources\MostRecentForecastResource;
 use App\Services\LocationForecastService;
+use App\Services\WeatherApiService;
 use Symfony\Component\HttpFoundation\Response;
 
 class LocationForecastController extends Controller
 {
-    public function __construct(
-        private readonly LocationForecastService $locationForecastService
-    ) {}
-
-    public function get(LocationGetRequest $request)
+    public function get(LocationGetRequest $request, WeatherApiService $weatherApiService,  LocationForecastService $locationForecastService): mixed
     {
         try {
-            $data = $this->locationForecastService->getMostRecentForecast($request);
+            $data = $locationForecastService->getMostRecentForecast($request, $weatherApiService);
 
             return MostRecentForecastResource::make($data);
         } catch (\Exception $e) {

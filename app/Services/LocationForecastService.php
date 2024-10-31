@@ -105,14 +105,17 @@ class LocationForecastService
     /**
      * Retrieves the most recent weather forecast based on the provided request.
      *
-     * @param \Illuminate\Http\Request $weatherData The request object containing necessary parameters.
+     * @param \Illuminate\Http\Request $request The request object containing necessary parameters.
      * @return array An array containing the most recent forecast data.
      */
-    public function getMostRecentForecast($weatherData): array
+    public function getMostRecentForecast(Request $request, WeatherApiService $weatherApiService): array
     {
         try {
-            $weatherApiService = new WeatherApiService;
-            $weatherData = $weatherApiService->getWeatherForecast($weatherData);
+            $city = $request->get('city');
+            $state = $request->get('state');
+
+            $weatherData = $weatherApiService->getWeatherForecast($city, $state);
+
             $mostRecentForecast = $weatherData->list[0];
             $cityData = $weatherData->city;
 

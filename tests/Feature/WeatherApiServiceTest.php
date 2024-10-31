@@ -2,41 +2,96 @@
 
 namespace Tests\Feature;
 
+use App\DataTransferObjects\WeatherApi\WeatherApiResponseData;
+use App\Models\User;
+use App\Services\LocationForecastService;
 use App\Services\WeatherApiService;
-use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class WeatherApiServiceTest extends TestCase
 {
+    protected LocationForecastService $locationForecastService;
+
     protected WeatherApiService $weatherApiService;
+
+    protected string $apiUrl;
+
+    protected $user;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->weatherApiService = new WeatherApiService;
+        $this->user = User::factory()->make();
+        $this->apiUrl = config('services.openWeather.url') . "/*";
+        $this->locationForecastService = new LocationForecastService();
+        $this->weatherApiService = new WeatherApiService();
     }
 
-    // public function test_it_can_fetch_weather_forecast_successfully(): void
-    // {
-    //     Http::fake([
-    //         '*' => Http::response([
-    //             'data' => [
-    //                 'city' => 'London',
-    //                 'list' => [
-    //                     [
-    //                         'main' => ['temp_min' => 10, 'temp_max' => 15],
-    //                         'weather' => [['description' => 'clear sky', 'icon' => '01d']],
-    //                         'dt' => now()->timestamp,
-    //                     ],
-    //                 ],
-    //             ],
-    //         ], 200),
-    //     ]);
+    public function test_fetch_weather_forecast_successfully(): void
+    {
+        $responseFromApiSample = json_decode(
+            file_get_contents(__DIR__ . '/../Stubs/WeatherApiResponse.json'),
+            true
+        );
 
-    //     $response = $this->weatherApiService->getWeatherForecast('London', 'UK');
+        $dataForDTO = [
+            'list' => $responseFromApiSample['response']['list'],
+            'city' => $responseFromApiSample['response']['city']
+        ];
 
-    //     $this->assertArrayHasKey('data', $response);
-    // }
+        $this->mock(WeatherApiService::class)
+            ->shouldReceive('getWeatherForecast')
+            ->with('London', 'UK')
+            ->once()
+            ->andReturn(
+                WeatherApiResponseData::from($dataForDTO)
+            );
+
+        $response = $this->actingAs($this->user, 'sanctum')->call('GET', '/api/v1/get-location-forecast', [
+            'city' => 'London',
+            'state' => 'UK',
+        ]);
+
+        $response->assertStatus(200);
+    }
+
+    public function test_fetch_weather_forecast_has_correct_return_format(): void
+    {
+        $responseFromApiSample = json_decode(
+            file_get_contents(__DIR__ . '/../Stubs/WeatherApiResponse.json'),
+            true
+        );
+
+        $dataForDTO = [
+            'list' => $responseFromApiSample['response']['list'],
+            'city' => $responseFromApiSample['response']['city']
+        ];
+
+        $this->mock(WeatherApiService::class)
+            ->shouldReceive('getWeatherForecast')
+            ->with('London', 'UK')
+            ->once()
+            ->andReturn(
+                WeatherApiResponseData::from($dataForDTO)
+            );
+
+        $response = $this->actingAs($this->user, 'sanctum')->call('GET', '/api/v1/get-location-forecast', [
+            'city' => 'London',
+            'state' => 'UK',
+        ]);
+
+        $response->assertJsonStructure([
+            'data' => [
+                "date",
+                "min_temperature",
+                "max_temperature",
+                "condition",
+                "icon",
+                "city",
+                "state",
+            ],
+        ]);
+    }
 
     // public function test_it_returns_error_on_failed_request(): void
     // {
