@@ -16,24 +16,14 @@ use Symfony\Component\HttpFoundation\Response;
 class UserController extends Controller
 {
     /**
-     * UserController constructor.
-     *
-     * Initializes the UserController class.
-     */
-    public function __construct(
-        private readonly UserService $userService,
-        private readonly LocationForecastService $locationForecastService
-    ) {}
-
-    /**
      * Retrieve the locations associated with the authenticated user.
      *
      * @param  \Illuminate\Http\Request  $request  The incoming HTTP request.
      */
-    public function getUserLocations(Request $request): mixed
+    public function getUserLocations(Request $request, UserService $userService): mixed
     {
         try {
-            $userLocations = $this->userService->getUserLocations($request);
+            $userLocations = $userService->getUserLocations($request);
 
             return LocationResource::collection($userLocations);
         } catch (\Exception $e) {
@@ -66,11 +56,11 @@ class UserController extends Controller
     /**
      * Delete a weather location.
      */
-    public function destroy(Request $request, string $locationId, string $date): ?JsonResponse
+    public function destroy(Request $request, string $locationId, string $date, LocationForecastService $locationForecastService): ?JsonResponse
     {
         try {
             $user = $request->user();
-            $this->locationForecastService->deleteLocation($locationId, $date, $user);
+            $locationForecastService->deleteLocation($locationId, $date, $user);
 
             return response()->json(null, Response::HTTP_NO_CONTENT);
         } catch (\Exception $e) {
