@@ -4,17 +4,20 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Jobs\CreateLocationForecast;
+use App\Models\Location;
 use App\Models\User;
 use Illuminate\Support\Facades\Bus;
 
 class UserControllerTest extends TestCase
 {
     protected $user;
+    protected $location;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->user = User::factory()->make();
+        $this->location = Location::factory()->make();
     }
 
     public function test_store_location_job_dispatched_successfully()
@@ -61,5 +64,18 @@ class UserControllerTest extends TestCase
             ]);
 
         Bus::assertNotDispatched(CreateLocationForecast::class);
+    }
+
+    public function test_destroy_location_successfully()
+    {
+        $locationId = $this->location->id;
+        $date = $this->location->date;
+
+        $response = $this->actingAs($this->user, 'sanctum')->delete("/api/v1/users/locations/{$locationId}/{$date}");
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'message' => 'Location deleted successfully!',
+            ]);
     }
 }

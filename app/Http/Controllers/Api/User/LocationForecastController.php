@@ -14,7 +14,10 @@ class LocationForecastController extends Controller
     public function get(LocationGetRequest $request, WeatherApiService $weatherApiService,  LocationForecastService $locationForecastService): mixed
     {
         try {
-            $data = $locationForecastService->getMostRecentForecast($request, $weatherApiService);
+            $city = $request->get('city');
+            $state = $request->get('state');
+
+            $data = $locationForecastService->getMostRecentForecast($city, $state, $weatherApiService);
 
             return MostRecentForecastResource::make($data);
         } catch (\Exception $e) {

@@ -20,14 +20,14 @@ class UserController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request  The incoming HTTP request.
      */
-    public function getUserLocations(Request $request, UserService $userService): mixed
+    public function get(Request $request, UserService $userService): mixed
     {
         try {
             $userLocations = $userService->getUserLocations($request);
 
             return LocationResource::collection($userLocations);
         } catch (\Exception $e) {
-            logger()->channel('daily')->error('Error getUserLocations locations: ' . $e->getMessage());
+            logger()->channel('daily')->error('Error UserController getUserLocations: ' . $e->getMessage());
 
             return response()->json([
                 'message' => 'Error fetching user locations',
@@ -64,10 +64,9 @@ class UserController extends Controller
 
             return response()->json(null, Response::HTTP_NO_CONTENT);
         } catch (\Exception $e) {
-            logger()->channel('daily')->error('Error destroy user locations: ' . $e->getMessage());
 
             return response()->json([
-                'message' => 'Error deleting user location',
+                'message' => $e->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

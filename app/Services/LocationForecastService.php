@@ -91,14 +91,19 @@ class LocationForecastService
     {
         try {
             $dateParsed = Carbon::parse($date)->format('Y-d-m');
+            $location = $user->locations()->findOrFail($locationId);
+            $forecasts = $location->forecasts()->where('date', $dateParsed);
+            if ($forecasts->count() === 0) {
+                throw new LocationForecastException('Location forecast not found.');
+            }
 
-            DB::transaction(static function () use ($locationId, $dateParsed, $user) {
-                $location = $user->locations()->findOrFail($locationId);
-
-                $location->forecasts()->where('date', $dateParsed)->delete();
+            DB::transaction(static function () use ($forecasts) {
+                $forecasts->delete();
             });
         } catch (\Throwable $th) {
-            throw new LocationForecastException($th->getMessage());
+            logger()->channel('daily')->error('Error destroy user locations: ' . $th->getMessage());
+
+            throw new LocationForecastException('Error deleting location forecast data.');
         }
     }
 
@@ -108,12 +113,9 @@ class LocationForecastService
      * @param \Illuminate\Http\Request $request The request object containing necessary parameters.
      * @return array An array containing the most recent forecast data.
      */
-    public function getMostRecentForecast(Request $request, WeatherApiService $weatherApiService): array
+    public function getMostRecentForecast(string $city, string $state, WeatherApiService $weatherApiService): array
     {
         try {
-            $city = $request->get('city');
-            $state = $request->get('state');
-
             $weatherData = $weatherApiService->getWeatherForecast($city, $state);
 
             $mostRecentForecast = $weatherData->list[0];
