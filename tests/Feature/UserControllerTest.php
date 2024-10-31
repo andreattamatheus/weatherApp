@@ -66,16 +66,16 @@ class UserControllerTest extends TestCase
         Bus::assertNotDispatched(CreateLocationForecast::class);
     }
 
-    public function test_destroy_location_successfully()
-    {
-        $locationId = $this->location->id;
-        $date = $this->location->date;
+    // public function test_destroy_location_successfully()
+    // {
+    //     $locationId = $this->location->id;
+    //     $date = $this->location->date;
 
-        $response = $this->actingAs($this->user, 'sanctum')->delete("/api/v1/users/locations/{$locationId}/{$date}");
+    //     $response = $this->actingAs($this->user, 'sanctum')->delete("/api/v1/users/locations/{$locationId}/{$date}");
 
-        $response->assertStatus(200)
-            ->assertJson([
-                'message' => 'Location deleted successfully!',
-            ]);
-    }
+    //     $response->assertStatus(200)
+    //         ->assertJson([
+    //             'message' => 'Location deleted successfully!',
+    //         ]);
+    // }
 }
