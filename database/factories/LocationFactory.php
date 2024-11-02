@@ -18,7 +18,7 @@ class LocationFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory()->make()->id,
+            'user_id' => User::factory()->create()->id,
             'city' => $this->faker->city,
             'state' => $this->faker->state,
         ];

@@ -18,19 +18,19 @@ class LocationForecastControllerTest extends TestCase
     {
         parent::setUp();
         $this->user = User::factory()->make();
-        $this->weatherApiService = new WeatherApiService();
+        $this->weatherApiService = new WeatherApiService;
     }
 
     public function test_fetch_weather_forecast_successfully(): void
     {
         $responseFromApiSample = json_decode(
-            file_get_contents(__DIR__ . '/../../Stubs/WeatherApiResponse.json'),
+            file_get_contents(__DIR__.'/../../Stubs/WeatherApiResponse.json'),
             true
         );
 
         $dataForDTO = [
             'list' => $responseFromApiSample['response']['list'],
-            'city' => $responseFromApiSample['response']['city']
+            'city' => $responseFromApiSample['response']['city'],
         ];
 
         $this->mock(WeatherApiService::class)
@@ -52,13 +52,13 @@ class LocationForecastControllerTest extends TestCase
     public function test_fetch_weather_forecast_has_correct_return_format(): void
     {
         $responseFromApiSample = json_decode(
-            file_get_contents(__DIR__ . '/../../Stubs/WeatherApiResponse.json'),
+            file_get_contents(__DIR__.'/../../Stubs/WeatherApiResponse.json'),
             true
         );
 
         $dataForDTO = [
             'list' => $responseFromApiSample['response']['list'],
-            'city' => $responseFromApiSample['response']['city']
+            'city' => $responseFromApiSample['response']['city'],
         ];
 
         $this->mock(WeatherApiService::class)
@@ -76,13 +76,13 @@ class LocationForecastControllerTest extends TestCase
 
         $response->assertJsonStructure([
             'data' => [
-                "date",
-                "min_temperature",
-                "max_temperature",
-                "condition",
-                "icon",
-                "city",
-                "state",
+                'date',
+                'min_temperature',
+                'max_temperature',
+                'condition',
+                'icon',
+                'city',
+                'state',
             ],
         ]);
     }

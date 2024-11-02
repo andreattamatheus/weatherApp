@@ -19,7 +19,6 @@ class ForecastResource extends JsonResource
 
     public string $state;
 
-
     public function __construct($resource)
     {
         parent::__construct($resource);

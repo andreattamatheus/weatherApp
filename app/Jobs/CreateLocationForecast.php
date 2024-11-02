@@ -2,13 +2,11 @@
 
 namespace App\Jobs;
 
-use App\Http\Resources\ForecastResource;
 use App\Models\User;
 use App\Services\LocationForecastService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Http\Request;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
@@ -22,8 +20,6 @@ class CreateLocationForecast implements ShouldQueue
 
     /**
      * Create a new job instance.
-     *
-     * @param array $weatherData
      */
     public function __construct(array $weatherData, User $user)
     {

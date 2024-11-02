@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LocationForecastController extends Controller
 {
-    public function get(LocationGetRequest $request, WeatherApiService $weatherApiService,  LocationForecastService $locationForecastService): mixed
+    public function get(LocationGetRequest $request, WeatherApiService $weatherApiService, LocationForecastService $locationForecastService): mixed
     {
         try {
             $city = $request->get('city');
@@ -21,7 +21,7 @@ class LocationForecastController extends Controller
 
             return MostRecentForecastResource::make($data);
         } catch (\Exception $e) {
-            logger()->channel('daily')->error('Error get locations: ' . $e->getMessage());
+            logger()->channel('daily')->error('Error get locations: '.$e->getMessage());
 
             return response()->json([
                 'message' => 'Error fetching most recent forecast',

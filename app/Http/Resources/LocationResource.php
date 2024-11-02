@@ -9,7 +9,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class LocationResource extends JsonResource
 {
     public int $id;
+
     public string $city;
+
     public Collection $forecasts;
 
     public function __construct($resource)
