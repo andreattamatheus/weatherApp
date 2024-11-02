@@ -56,11 +56,11 @@ class UserController extends Controller
     /**
      * Delete a weather location.
      */
-    public function destroy(Request $request, string $locationId, string $date, LocationForecastService $locationForecastService): ?JsonResponse
+    public function destroy(Request $request, string $locationId, string $date, UserService $userService): ?JsonResponse
     {
         try {
             $user = $request->user();
-            $locationForecastService->deleteLocation($locationId, $date, $user);
+            $userService->deleteLocation($locationId, $date, $user);
 
             return response()->json(null, Response::HTTP_NO_CONTENT);
         } catch (\Exception $e) {

@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\User;
-use App\Services\LocationForecastService;
+use App\Services\UserService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -32,8 +32,8 @@ class CreateLocationForecast implements ShouldQueue
      *
      * @return void
      */
-    public function handle(LocationForecastService $locationForecastService)
+    public function handle(UserService $userService)
     {
-        $locationForecastService->store($this->weatherData, $this->user);
+        $userService->store($this->weatherData, $this->user);
     }
 }

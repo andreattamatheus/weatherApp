@@ -7,22 +7,10 @@ use App\Http\Resources\ForecastResource;
 use App\Models\Location;
 use App\Models\LocationForecast;
 use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class LocationForecastService
 {
-    /**
-     * Store the location forecast data.
-     */
-    public function store(array $weatherData, User $user): void
-    {
-        $weatherData = ForecastResource::make($weatherData);
-        $location = $this->createLocation($weatherData, $user);
-        $this->createLocationForecast($location, $weatherData);
-    }
-
     /**
      * Creates a new location based on the provided request data.
      */
@@ -66,29 +54,6 @@ class LocationForecastService
             });
         } catch (\Throwable $th) {
             throw new LocationForecastException($th->getMessage());
-        }
-    }
-
-    /**
-     * Deletes a location forecast for a specific date and user.
-     *
-     * @param  string  $locationId  The ID of the location to be deleted.
-     * @param  string  $date  The date for which the location forecast should be deleted.
-     * @param  User  $user  The user requesting the deletion.
-     */
-    public function deleteLocation(string $locationId, string $date, User $user): void
-    {
-        try {
-            $location = $user->locations()->findOrFail($locationId);
-            $forecast = $location->forecasts()->where('date', $date)->first();
-
-            DB::transaction(static function () use ($forecast) {
-                $forecast->delete();
-            });
-        } catch (\Throwable $th) {
-            logger()->channel('daily')->error('Error destroy user locations: ' . $th->getMessage());
-
-            throw new LocationForecastException('Error deleting location forecast data.');
         }
     }
 
