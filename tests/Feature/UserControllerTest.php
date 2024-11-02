@@ -73,7 +73,7 @@ class UserControllerTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJson([
-                'message' => 'Location saved successfully!',
+                'message' => 'Location register successfully!',
             ]);
 
         Bus::assertDispatched(CreateLocationForecast::class);

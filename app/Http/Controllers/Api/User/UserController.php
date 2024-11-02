@@ -42,7 +42,7 @@ class UserController extends Controller
             CreateLocationForecast::dispatch($weatherData, $request->user());
 
             return response()->json([
-                'message' => 'Location saved successfully!',
+                'message' => 'Location register successfully!',
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             logger()->channel('daily')->error('Error saving user locations: ' . $e->getMessage());
