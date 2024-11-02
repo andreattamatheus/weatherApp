@@ -6,6 +6,7 @@ use App\Jobs\CreateLocationForecast;
 use App\Models\Location;
 use App\Models\LocationForecast;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
@@ -32,6 +33,29 @@ class UserControllerTest extends TestCase
         ]);
     }
 
+    public function test_get_users_locations_successfully()
+    {
+        $response = $this->actingAs($this->user, 'sanctum')->getJson('/api/v1/users/locations');
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [
+                    0 => [
+                        'id',
+                        'city',
+                        'forecasts' => [
+                            '*' => [
+                                'date',
+                                'min_temperature',
+                                'max_temperature',
+                                'condition',
+                            ],
+                        ],
+                    ],
+                ],
+            ]);
+    }
+
     public function test_store_location_job_dispatched_successfully()
     {
         Bus::fake();
@@ -52,7 +76,6 @@ class UserControllerTest extends TestCase
                 'message' => 'Location saved successfully!',
             ]);
 
-        // Check that the job was dispatched with correct data
         Bus::assertDispatched(CreateLocationForecast::class);
     }
 
@@ -90,5 +113,15 @@ class UserControllerTest extends TestCase
             'date' => $date,
             'deleted_at' => null,
         ]);
+    }
+
+    public function test_destroy_location_faild()
+    {
+        $locationId = $this->location->id;
+        $date = Carbon::today()->addDays(1)->format('Y-d-m');
+
+        $response = $this->actingAs($this->user, 'sanctum')->delete("/api/v1/users/locations/{$locationId}/{$date}");
+
+        $response->assertStatus(500);
     }
 }
