@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exceptions\LocationForecastException;
 use App\Http\Resources\ForecastResource;
 use App\Models\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -49,7 +50,7 @@ class UserService
     {
         try {
             $location = $user->locations()->findOrFail($locationId);
-            $forecast = $location->forecasts()->where('date', $date)->first();
+            $forecast = $location->forecasts()->where('date', Carbon::parse($date)->format('Y-d-m'))->first();
 
             DB::transaction(static function () use ($forecast) {
                 $forecast->delete();
