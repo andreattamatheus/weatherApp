@@ -50,7 +50,7 @@ class UserService
     {
         try {
             $location = $user->locations()->findOrFail($locationId);
-            $forecast = $location->forecasts()->where('date', Carbon::parse($date)->format('Y-d-m'))->first();
+            $forecast = $location->forecasts()->where('date', $date)->first();
 
             DB::transaction(static function () use ($forecast) {
                 $forecast->delete();
