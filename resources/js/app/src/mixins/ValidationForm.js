@@ -15,10 +15,10 @@ export default {
             return isValid;
         },
 
-        convertErrorFromArray(error) {
+        async convertErrorFromArray(error) {
             const transformedErrors = {};
-            for (let field in error.data) {
-                transformedErrors[field] = error.data[field][0];
+            for (let field in error) {
+                transformedErrors[field] = error[field][0];
             }
             return transformedErrors;
         },

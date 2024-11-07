@@ -43,6 +43,7 @@
 import Loading from 'vue-loading-overlay';
 import NotificationPopUp from '@/components/notifications/NotificationPopUp.vue';
 import ValidationForm from '@/mixins/ValidationForm';
+import { AuthController } from "../../controllers/AuthController";
 
 export default {
     name: "LoginView",
@@ -74,34 +75,28 @@ export default {
     },
 
     methods: {
-        async login(event) {
-            this.isLoading = true;
-            if (this.validateForm()) {
-                await this.$axios
-                    .post("v1/login", this.form)
-                    .then(({ data }) => {
-                        if (data.access_token) {
-                            this.validationErrors = {};
-                            console.log(data);
-                            this.signIn(data);
-                        } else {
-                            this.validationErrors = this.convertErrorFromArray(data);
-                        }
-                    })
-                    .catch((error) => {
-                        if (error.response && error.response.data.errors) {
-                            this.validationErrors = this.convertErrorFromArray(error);
-                        }
-                    })
+
+        async login() {
+            try {
+                this.isLoading = true;
+                if (this.validateForm()) {
+                    const authController = new AuthController();
+                    const response = await authController.login(this.form);
+
+                    if (response.statusCode !== 200) {
+                        this.validationErrors = await this.convertErrorFromArray(response.body.errors);
+                        return;
+                    }
+                    this.validationErrors = {};
+                    this.$router.push({ name: "home" });
+                }
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.isLoading = false;
             }
-            this.isLoading = false;
-            return;
         },
 
-        signIn(data) {
-            localStorage.setItem("access_token", data.access_token);
-            this.$router.push({ name: "home" });
-        },
     },
 
 

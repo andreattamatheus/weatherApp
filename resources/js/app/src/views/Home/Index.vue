@@ -1,12 +1,15 @@
 <template>
     <div class="flex">
-        <div class="w-full flex items-startbg-background-primary font-sans vl-parent" ref="formContainer">
+        <div class="w-full flex items-start bg-background-primary font-sans vl-parent" ref="formContainer">
             <div class="container-app">
+                <div class="header flex justify-center">
+                    <h1>WEATHER APP</h1>
+                </div>
                 <div class="flex justify-between items-center">
                     <div
-                        class="search-bar flex flex-col space-y-4 sm:space-y-4 p-8 border-solid border-2 border-gray-200 rounded">
-                        <div class="header flex justify-center">
-                            <h1>WEATHER APP</h1>
+                    class="search-bar w-full sm:w-1/2 flex flex-col space-y-4 sm:space-y-4 p-8 border-solid border-2 border-gray-200 rounded">
+                        <div class="mr-auto">
+                            <h2 class="text-lg font-semibold">Discover the weather:</h2>
                         </div>
                         <div class="flex flex-col justify-start text-left w-full">
                             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -18,7 +21,7 @@
                                 placeholder="Enter the city name" required />
                             <span class="text-sm text-red-500 mt-1 ml-1" v-if="this.validationErrors.city">{{
                                 this.validationErrors.city
-                                }}</span>
+                            }}</span>
                         </div>
                         <div class="flex flex-col justify-start text-left w-full ">
                             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -30,7 +33,7 @@
                                 placeholder="Enter the city country" required />
                             <span class="text-sm text-red-500 mt-1 ml-1" v-if="this.validationErrors.state">{{
                                 this.validationErrors.state
-                            }}</span>
+                                }}</span>
                         </div>
                         <div class="flex flex-col justify-start text-left w-full ">
                             <button @click="getForecastByCityAndState"
@@ -48,10 +51,11 @@
                                         <span class="text-6xl font-bold">{{ weatherData?.max_temperature }} °C</span>
                                         <span class="font-semibold mt-1 text-gray-500">{{ weatherData?.city }}, {{
                                             weatherData?.state }}</span>
-                                        <span class="font-semibold mt-1 text-gray-500">{{ weatherData?.condition }}</span>
+                                        <span class="font-semibold mt-1 text-gray-500">{{ weatherData?.condition
+                                            }}</span>
                                     </div>
-                                    <svg class="h-24 w-24 fill-current text-yellow-400" xmlns="http://www.w3.org/2000/svg"
-                                        height="24" viewBox="0 0 24 24" width="24">
+                                    <svg class="h-24 w-24 fill-current text-yellow-400"
+                                        xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
                                         <path d="M0 0h24v24H0V0z" fill="none" />
                                         <path
                                             d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79zM1 10.5h3v2H1zM11 .55h2V3.5h-2zm8.04 2.495l1.408 1.407-1.79 1.79-1.407-1.408zm-1.8 15.115l1.79 1.8 1.41-1.41-1.8-1.79zM20 10.5h3v2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm-1 4h2v2.95h-2zm-7.45-.96l1.41 1.41 1.79-1.8-1.41-1.41z" />
@@ -61,7 +65,8 @@
                                     <div class="flex flex-col items-center">
                                         <span class="font-semibold text-lg">31°C</span>
                                         <svg class="h-10 w-10 fill-current text-gray-400 mt-3"
-                                            xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+                                            xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+                                            width="24">
                                             <path d="M0 0h24v24H0V0z" fill="none" />
                                             <path
                                                 d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79zM1 10.5h3v2H1zM11 .55h2V3.5h-2zm8.04 2.495l1.408 1.407-1.79 1.79-1.407-1.408zm-1.8 15.115l1.79 1.8 1.41-1.41-1.8-1.79zM20 10.5h3v2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm-1 4h2v2.95h-2zm-7.45-.96l1.41 1.41 1.79-1.8-1.41-1.41z" />
@@ -72,7 +77,8 @@
                                     <div class="flex flex-col items-center">
                                         <span class="font-semibold text-lg">32°C</span>
                                         <svg class="h-10 w-10 fill-current text-gray-400 mt-3"
-                                            xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+                                            xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+                                            width="24">
                                             <path d="M0 0h24v24H0V0z" fill="none" />
                                             <path
                                                 d="M12.01 6c2.61 0 4.89 1.86 5.4 4.43l.3 1.5 1.52.11c1.56.11 2.78 1.41 2.78 2.96 0 1.65-1.35 3-3 3h-13c-2.21 0-4-1.79-4-4 0-2.05 1.53-3.76 3.56-3.97l1.07-.11.5-.95C8.08 7.14 9.95 6 12.01 6m0-2C9.12 4 6.6 5.64 5.35 8.04 2.35 8.36.01 10.91.01 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.64-4.96C18.68 6.59 15.65 4 12.01 4z" />
@@ -83,7 +89,8 @@
                                     <div class="flex flex-col items-center">
                                         <span class="font-semibold text-lg">31°C</span>
                                         <svg class="h-10 w-10 fill-current text-gray-400 mt-3"
-                                            xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+                                            xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+                                            width="24">
                                             <path d="M0 0h24v24H0V0z" fill="none" />
                                             <path
                                                 d="M12.01 6c2.61 0 4.89 1.86 5.4 4.43l.3 1.5 1.52.11c1.56.11 2.78 1.41 2.78 2.96 0 1.65-1.35 3-3 3h-13c-2.21 0-4-1.79-4-4 0-2.05 1.53-3.76 3.56-3.97l1.07-.11.5-.95C8.08 7.14 9.95 6 12.01 6m0-2C9.12 4 6.6 5.64 5.35 8.04 2.35 8.36.01 10.91.01 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.64-4.96C18.68 6.59 15.65 4 12.01 4z" />
@@ -94,8 +101,8 @@
                                     <div class="flex flex-col items-center">
                                         <span class="font-semibold text-lg">27°C</span>
                                         <svg class="h-10 w-10 fill-current text-gray-400 mt-3"
-                                            xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24"
-                                            viewBox="0 0 24 24" width="24">
+                                            xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24"
+                                            height="24" viewBox="0 0 24 24" width="24">
                                             <g>
                                                 <rect fill="none" height="24" width="24" />
                                             </g>
@@ -126,9 +133,14 @@
                     <div class="cast-header bg-gray-700 hover:bg-gray-800 text-white">User locations</div>
                     <spinner v-if="isLoadingForecast" />
                     <div v-else class="forecast-list">
-                        <div class="next flex flex-col forecast-card" v-for="(location) in userLocations"
+                        <div class="next flex pb-2 flex-col forecast-card relative cursor-pointer" v-for="(location) in userLocations"
                             :key="location.id">
-                            <p class="desc mb-4">{{ location.city }} ({{ location.date }})</p>
+                            <div @click="deleteUserLocation(location.id, location.date)"
+                                class="absolute top-4 right-6 cursor-pointer text-red-700 hover:text-red-800"
+                                title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </div>
+                            <p class="desc mb-4"><b>{{ location.city }}</b> - {{ location.date }}</p>
                             <div class="flex justify-center align-center">
                                 <p class="text-red mr-1">{{ location.max_temperature }} ° / </p>
                                 <p class="text-blue"> {{ location.min_temperature }} °</p>
@@ -137,8 +149,6 @@
                                 <img :src="getIcon(location.icon)" alt="Weather Icon" />
                                 <p class="desc">{{ location.condition }}</p>
                             </div>
-                            <button @click="deleteUserLocation(location.id, location.date)"
-                                class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Delete</button>
                         </div>
                     </div>
                 </div>
@@ -179,7 +189,7 @@ export default {
         async fetchUserData() {
             try {
                 this.isLoadingForecast = true;
-                const locationController = new LocationController(this.$axios);
+                const locationController = new LocationController();
                 this.userLocations = await locationController.get();
             } catch (error) {
                 this.$toast.error("Error fetching locations");
@@ -191,7 +201,7 @@ export default {
         async getForecastByCityAndState() {
             try {
                 this.isLoading = true;
-                const locationController = new LocationController(this.$axios);
+                const locationController = new LocationController();
                 this.weatherData = await locationController.getForecastByCityAndState(this.city, this.state);
             } catch (error) {
                 this.$toast.error("Error fetching locations");
@@ -203,7 +213,7 @@ export default {
         async saveUserLocation() {
             try {
                 this.isLoading = true;
-                const locationController = new LocationController(this.$axios);
+                const locationController = new LocationController();
                 this.weatherData = await locationController.save(this.city, this.state, this.weatherData);
                 await this.fetchUserData();
             } catch (error) {
@@ -216,7 +226,7 @@ export default {
         async deleteUserLocation(locationId, date) {
             try {
                 this.isLoading = true;
-                const locationController = new LocationController(this.$axios);
+                const locationController = new LocationController();
                 this.weatherData = await locationController.delete(locationId, date);
                 await this.fetchUserData();
             } catch (error) {

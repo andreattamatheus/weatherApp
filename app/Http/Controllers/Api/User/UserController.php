@@ -7,7 +7,6 @@ use App\Http\Requests\LocationStoreRequest;
 use App\Http\Resources\ForecastResource;
 use App\Http\Resources\LocationResource;
 use App\Jobs\CreateLocationForecast;
-use App\Services\LocationForecastService;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

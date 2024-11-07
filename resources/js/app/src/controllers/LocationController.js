@@ -1,11 +1,9 @@
-export class LocationController {
-    constructor(axios) {
-        this.axios = axios;
-    }
+import { httpClient } from "../plugins/axios";
 
+export class LocationController {
     async get() {
         try {
-            const response = await this.axios.get("v1/users/locations");
+            const response = await httpClient.get("v1/users/locations");
             if (response.status !== 200) {
                 return response.data[0];
             }
@@ -38,7 +36,7 @@ export class LocationController {
 
     async getForecastByCityAndState(city, state) {
         try {
-            const response = await this.axios.get("v1/get-location-forecast", {
+            const response = await httpClient.get("v1/get-location-forecast", {
                 params: {
                     city: city,
                     state: state,
@@ -66,7 +64,7 @@ export class LocationController {
 
     async save(city, state, weatherData) {
         try {
-            const response = await this.axios.post("v1/users/locations", {
+            const response = await httpClient.post("v1/users/locations", {
                 city: city,
                 state: state,
                 weatherData: weatherData,
@@ -85,7 +83,7 @@ export class LocationController {
 
     async delete(locationId, date) {
         try {
-            const response = await this.axios.delete(
+            const response = await httpClient.delete(
                 `v1/users/locations/${locationId}/${date}`
             );
             if (response.status !== 204) {

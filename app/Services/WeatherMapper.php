@@ -27,7 +27,7 @@ final class WeatherMapper
     public function mapForecast(LocationForecast $forecast): array
     {
         return [
-            'date' => Carbon::parse($forecast['date'])->format('Y-d-m'),
+            'date' => Carbon::parse($forecast['date'])->format('Y/m/d'),
             'min_temperature' => $forecast['min_temperature'],
             'max_temperature' => $forecast['max_temperature'],
             'condition' => $forecast['condition'],
