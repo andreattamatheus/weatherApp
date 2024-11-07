@@ -7,7 +7,7 @@
                 </div>
                 <div class="flex flex-col sm:flex-row justify-between items-center space-x-0 sm:space-x-2">
                     <div
-                    class="search-bar w-full sm:w-1/2 flex flex-col space-y-4 sm:space-y-4 p-8 border-solid border-2 border-gray-200 rounded">
+                        class="search-bar w-full sm:w-1/2 flex flex-col space-y-4 sm:space-y-4 p-8 border-solid border-2 border-gray-200 rounded">
                         <div class="mr-auto">
                             <h2 class="text-lg font-semibold">Discover the weather:</h2>
                         </div>
@@ -21,20 +21,25 @@
                                 placeholder="Enter the city name" required />
                             <span class="text-sm text-red-500 mt-1 ml-1" v-if="this.validationErrors.city">{{
                                 this.validationErrors.city
-                            }}</span>
-                        </div>
-                        <div class="flex flex-col justify-start text-left w-full ">
-                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                                for="grid-first-name">
-                                Country
-                            </label>
-                            <input type="text" v-model="state" id="state"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Enter the city country" required />
-                            <span class="text-sm text-red-500 mt-1 ml-1" v-if="this.validationErrors.state">{{
-                                this.validationErrors.state
                                 }}</span>
                         </div>
+                        <div class="flex flex-col justify-start text-left w-full">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                for="country-select">
+                                Country
+                            </label>
+                            <select v-model="state" id="country-select"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                required>
+                                <option disabled value="">Select a country</option>
+                                <option v-for="country in countryList" :key="country.code" :value="country">{{ country.name }}
+                                </option>
+                            </select>
+                            <span class="text-sm text-red-500 mt-1 ml-1" v-if="validationErrors.state">
+                                {{ validationErrors.state }}
+                            </span>
+                        </div>
+
                         <div class="flex flex-col justify-start text-left w-full ">
                             <button @click="getForecastByCityAndState"
                                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
@@ -44,8 +49,7 @@
                     <main v-if="weatherData" class="w-full sm:w-1/2 border-solid border-2 border-gray-200 rounded">
                         <div class="flex flex-col items-center justify-center text-gray-700 p-10 bg-gradient-to-br ">
                             <spinner class="w-full max-w-screen-sm" v-if="isLoading" />
-                            <div v-else
-                                class="w-full max-w-screen-sm px-10 rounded-xl">
+                            <div v-else class="w-full max-w-screen-sm px-10 rounded-xl">
                                 <div class="flex justify-between">
                                     <div class="flex flex-col">
                                         <span class="text-4xl font-bold">{{ weatherData?.max_temperature }} °C</span>
@@ -133,8 +137,8 @@
                     <div class="cast-header bg-gray-700 hover:bg-gray-800 text-white">User locations</div>
                     <spinner v-if="isLoadingForecast" />
                     <div v-else class="forecast-list">
-                        <div class="next flex pb-2 flex-col forecast-card relative cursor-pointer" v-for="(location) in userLocations"
-                            :key="location.id">
+                        <div class="next flex pb-2 flex-col forecast-card relative cursor-pointer"
+                            v-for="(location) in userLocations" :key="location.id">
                             <div @click="deleteUserLocation(location.id, location.date)"
                                 class="absolute top-4 right-6 cursor-pointer text-red-700 hover:text-red-800"
                                 title="Delete">
@@ -162,6 +166,7 @@
 import Loading from 'vue-loading-overlay';
 import Spinner from '@/components/Spinner.vue';
 import { LocationController } from "../../controllers/LocationController";
+import { CountryController } from "../../controllers/CountryController";
 
 export default {
     name: "Home",
@@ -178,12 +183,14 @@ export default {
             city: "",
             state: "",
             weatherData: null,
+            countryList: [],
             userLocations: [],
             validationErrors: {},
         };
     },
     mounted() {
         this.fetchUserData();
+        this.getCountryList();
     },
     methods: {
         async fetchUserData() {
@@ -192,7 +199,7 @@ export default {
                 const locationController = new LocationController();
                 this.userLocations = await locationController.get();
             } catch (error) {
-                this.$toast.error("Error fetching locations");
+                console.log(error);
             } finally {
                 this.isLoadingForecast = false;
             }
@@ -202,9 +209,9 @@ export default {
             try {
                 this.isLoading = true;
                 const locationController = new LocationController();
-                this.weatherData = await locationController.getForecastByCityAndState(this.city, this.state);
+                this.weatherData = await locationController.getForecastByCityAndState(this.city, this.state['name']);
             } catch (error) {
-                this.$toast.error("Error fetching locations");
+                console.log(error);
             } finally {
                 this.isLoading = false;
             }
@@ -214,10 +221,10 @@ export default {
             try {
                 this.isLoading = true;
                 const locationController = new LocationController();
-                this.weatherData = await locationController.save(this.city, this.state, this.weatherData);
+                this.weatherData = await locationController.save(this.city, this.state['name'], this.weatherData);
                 await this.fetchUserData();
             } catch (error) {
-                this.$toast.error("Error saving user location");
+                console.log(error);
             } finally {
                 this.isLoading = false;
             }
@@ -230,7 +237,21 @@ export default {
                 this.weatherData = await locationController.delete(locationId, date);
                 await this.fetchUserData();
             } catch (error) {
-                this.$toast.error("Error saving user location");
+                console.log(error);
+            } finally {
+                this.isLoading = false;
+            }
+        },
+
+        async getCountryList() {
+            try {
+                this.isLoading = true;
+                const countryController = new CountryController();
+                const response = await countryController.get();
+                this.countryList = response.data
+            } catch (error) {
+                console.log(error);
+                // this.$toast.error("Error fetching countries");
             } finally {
                 this.isLoading = false;
             }

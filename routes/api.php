@@ -16,10 +16,11 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('get-location-forecast', [LocationForecastController::class, 'get'])->name('weather.forecast');
+        Route::get('countries', [LocationForecastController::class, 'getCountries'])->name('countries');
         Route::prefix('users')->group(function () {
-            Route::get('/locations', [UserController::class, 'get']);
-            Route::post('/locations', [UserController::class, 'store']);
-            Route::delete('/locations/{id}/{date}', [UserController::class, 'destroy']);
+            Route::get('/locations', [UserController::class, 'get'])->name('user.locations');
+            Route::post('/locations', [UserController::class, 'store'])->name('user.locations.store');
+            Route::delete('/locations/{id}/{date}', [UserController::class, 'destroy'])->name('user.locations.destroy');
         });
     });
 });
