@@ -5,7 +5,7 @@
                 <div class="header flex justify-center">
                     <h1>WEATHER APP</h1>
                 </div>
-                <div class="flex justify-between items-center">
+                <div class="flex flex-col sm:flex-row justify-between items-center space-x-0 sm:space-x-2">
                     <div
                     class="search-bar w-full sm:w-1/2 flex flex-col space-y-4 sm:space-y-4 p-8 border-solid border-2 border-gray-200 rounded">
                         <div class="mr-auto">
@@ -41,14 +41,14 @@
                         </div>
                     </div>
 
-                    <main v-if="weatherData" class="border-solid border-2 border-gray-200 rounded">
+                    <main v-if="weatherData" class="w-full sm:w-1/2 border-solid border-2 border-gray-200 rounded">
                         <div class="flex flex-col items-center justify-center text-gray-700 p-10 bg-gradient-to-br ">
                             <spinner class="w-full max-w-screen-sm" v-if="isLoading" />
                             <div v-else
-                                class="w-full max-w-screen-sm bg-white p-10 rounded-xl ring-8 ring-white ring-opacity-40">
+                                class="w-full max-w-screen-sm px-10 rounded-xl">
                                 <div class="flex justify-between">
                                     <div class="flex flex-col">
-                                        <span class="text-6xl font-bold">{{ weatherData?.max_temperature }} °C</span>
+                                        <span class="text-4xl font-bold">{{ weatherData?.max_temperature }} °C</span>
                                         <span class="font-semibold mt-1 text-gray-500">{{ weatherData?.city }}, {{
                                             weatherData?.state }}</span>
                                         <span class="font-semibold mt-1 text-gray-500">{{ weatherData?.condition
@@ -119,8 +119,8 @@
                                         <span class="text-xs font-semibold text-gray-400">PM</span>
                                     </div>
                                 </div>
-                                <button @click="saveUserLocation"
-                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
+                                <button @click="saveUserLocation" type="submit"
+                                    class="mt-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
                             </div>
 
                         </div>
