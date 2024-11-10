@@ -43,7 +43,7 @@
 import Loading from 'vue-loading-overlay';
 import NotificationPopUp from '@/components/notifications/NotificationPopUp.vue';
 import ValidationForm from '@/mixins/ValidationForm';
-import { AuthController } from "../../controllers/AuthController";
+import { AuthController } from "@/controllers/AuthController";
 
 export default {
     name: "LoginView",
