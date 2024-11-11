@@ -48,66 +48,66 @@
 </template>
 
 <script>
-import InputTextField from '@/components/InputTextField.vue'
-import { LocationController } from '@/controllers/LocationController'
-import { CountryController } from '@/controllers/CountryController'
-import InputSelectField from '@/components/InputSelectField.vue'
+import InputTextField from "@/components/InputTextField.vue";
+import { LocationController } from "@/controllers/LocationController";
+import { CountryController } from "@/controllers/CountryController";
+import InputSelectField from "@/components/InputSelectField.vue";
 
 export default {
     components: { InputTextField, InputSelectField },
     props: {},
     data() {
         return {
-            city: '',
-            state: '',
+            city: "",
+            state: "",
             countryList: [],
             validationErrors: {
-                city: '',
-                state: '',
+                city: "",
+                state: "",
             },
-        }
+        };
     },
     watch: {},
     computed: {},
     methods: {
         async getForecastByCityAndState() {
-            console.log('getForecastByCityAndState')
-            console.log(this.city, this.state)
+            console.log("getForecastByCityAndState");
+            console.log(this.city, this.state);
 
             try {
-                this.isLoading = true
-                const locationController = new LocationController()
+                this.isLoading = true;
+                const locationController = new LocationController();
                 const weatherData =
                     await locationController.getForecastByCityAndState(
                         this.city,
-                        this.state['name']
-                    )
-                this.$emit('getForecast', weatherData)
+                        this.state["name"],
+                    );
+                this.$emit("getForecast", weatherData);
             } catch (error) {
-                console.log(error)
+                console.log(error);
             } finally {
-                this.isLoading = false
+                this.isLoading = false;
             }
         },
 
         async getCountryList() {
             try {
-                this.isLoading = true
-                const countryController = new CountryController()
-                const response = await countryController.get()
-                this.countryList = response.data
+                this.isLoading = true;
+                const countryController = new CountryController();
+                const response = await countryController.get();
+                this.countryList = response.data;
             } catch (error) {
-                console.log(error)
+                console.log(error);
             } finally {
-                this.isLoading = false
+                this.isLoading = false;
             }
         },
     },
     created() {},
     mounted() {
-        this.getCountryList()
+        this.getCountryList();
     },
-}
+};
 </script>
 
 <style></style>
