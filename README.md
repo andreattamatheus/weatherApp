@@ -1,43 +1,26 @@
 <!-- PROJECT LOGO -->
-<br />
-<div align="center">
-  <a href="https://github.com/andreattamatheus/the-todo-app">
-    <img src="https://photos5.appleinsider.com/gallery/51141-100995-IMG_2163-xl.jpg" alt="Logo" width="80" height="80">
-  </a>
 
-  <h3 align="center">The Weather App</h3>
-</div>
+# The Weather App
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ol>
-</details>
+<p align="center">
+  The Weather App is a web application designed to provide users with accurate and up-to-date weather information. Users can search for the current weather and forecast for any city worldwide. The application integrates with the OpenWeatherMap API to fetch weather data and displays it in a user-friendly interface.
+  <img src="./public/image-readme.png" alt="Presentation" />
+</p>
 
-<!-- ABOUT THE PROJECT -->
+## Technologies used
+
+<img src="https://skillicons.dev/icons?i=html,css,javascript,typescript,docker,git,laravel,vue,mysql,php,tailwindcss" width="415px" alt="Technologies" />
 
 ## About The Project
 
-You will develop a web application using Vue JS (2 or 3), PHP 8+, Laravel 11+, MySQL 8+ or SQLite database. You need to publish on github or other git repository with all instructions to execute your project.
+Key features of the Weather App include:
 
-The project will be a Weather App In order to do that, we recommend using Current weather and forecast (free account), but you can choose any API of your choice
+-   Real-time weather updates
+-   5-day weather forecast
+-   Search functionality for cities worldwide
+-   Responsive design for optimal viewing on different devices
+
+The project is built using modern web technologies and follows best practices for performance and maintainability.
 
 An example of call to get the weather for London is http://api.openweathermap.org/data/2.5/forecast?q=London,uk&APPID=YOUR_API_KEY
 
