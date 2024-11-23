@@ -25,3 +25,4 @@ Dockerfile
 /resources/js/app/public
 /resources/js/app/.env
 /resources/js/app/dist
+/tests/reports

@@ -49,8 +49,8 @@
 
 <script>
 import InputTextField from "@/components/InputTextField.vue";
-import { LocationController } from "@/controllers/LocationController";
-import { CountryController } from "@/controllers/CountryController";
+import {LocationController} from "@/controllers/LocationController";
+import {CountryController} from "@/controllers/CountryController";
 import InputSelectField from "@/components/InputSelectField.vue";
 
 export default {
@@ -73,7 +73,6 @@ export default {
         async getForecastByCityAndState() {
             console.log("getForecastByCityAndState");
             console.log(this.city, this.state);
-
             try {
                 this.isLoading = true;
                 const locationController = new LocationController();

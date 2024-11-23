@@ -18,7 +18,7 @@
             <div class="max-w-[1280px] w-ful h-full mx-auto p-8 ">
                 <div class="flex lg:flex-row flex-col space-x-0 lg:space-x-4 items-center lg:items-start ">
                     <SearchBar />
-                    <div v-if="weatherData" class="w-full lg:w-1/2 border-solid border-2 border-gray-200 rounded">
+                    <div v-if="!weatherData" class="w-full lg:w-1/2 border-solid border-2 border-gray-200 rounded">
                         <ForecastCard v-if="!weatherData" @getForecast="getForecast" :weatherData="weatherData" :isLoading="isLoading" />
                     </div>
                 </div>
@@ -57,7 +57,7 @@ import ListFilter from '@/components/ListFilter.vue';
 import IconLocation from '@/components/icons/IconLocation.vue';
 import ForecastCard from '@/views/Home/WeatherForecast/ForecastCard.vue';
 import SearchBar from '@/views/Home/WeatherForecast/SearchBar.vue';
-import { LocationController } from "@/controllers/LocationController";
+import {LocationController} from "@/controllers/LocationController";
 
 export default {
     name: "Home",
@@ -116,8 +116,6 @@ export default {
         async getForecast(weatherData) {
             this.weatherData = weatherData;
         },
-
-
 
     },
 };

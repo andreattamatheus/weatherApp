@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\DataTransferObjects\WeatherApi\WeatherApiResponseData;
 use App\Exceptions\LocationForecastException;
 use Illuminate\Http\Client\RequestException;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 
@@ -42,7 +42,7 @@ class CountryApiService
      * @throws \JsonException
      * @throws LocationForecastException
      */
-    public function decodeResponse($response, string $endpoint = ''): array
+    public function decodeResponse(Response $response, string $endpoint = ''): array
     {
         $decodedResponse = json_decode($response->body(), true, 512, JSON_THROW_ON_ERROR);
         if ($response->failed()) {
