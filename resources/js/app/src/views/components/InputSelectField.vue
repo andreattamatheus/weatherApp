@@ -7,8 +7,8 @@
             class="flex h-10 w-full rounded-lg border bg-input px-3 py-2.5 text-sm caret-primary transition-all placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 focus-visible:ring-ring"
             required>
             <option disabled value="">Select a {{ fieldType }}</option>
-            <option v-for="modelValue in options" :key="modelValue.code" :value="modelValue">
-                {{ modelValue.name }}
+            <option v-for="option in options" :key="option.code" :value="option.name">
+                {{ option.name }}
             </option>
         </select>
         <span class="text-sm text-red-500 mt-1 ml-1" v-if="validationErrors.state">

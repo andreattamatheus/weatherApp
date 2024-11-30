@@ -44,7 +44,7 @@ export const getForecastByCityAndState = async (params: {
 }) => {
     try {
         const { dataReturn, error }: ApiResponse = await useApi(
-            "v1/users/locations",
+            "v1/get-location-forecast",
             params,
         );
 
@@ -67,24 +67,24 @@ export const convertErrorFromArray = (error: object = {}) => {
     return transformedErrors;
 };
 
-// export const save = async (city, state, weatherData) => {
-//     try {
-//         const response = await httpClient.post("v1/users/locations", {
-//             city: city,
-//             state: state,
-//             weatherData: weatherData,
-//         });
+export const save = async (params: Location) => {
+    try {
+        const { dataReturn, error } = await useApi(
+            "v1/users/locations",
+            params,
+            "post",
+        );
 
-//         if (response.status !== 200) {
-//             return response.data[0];
-//         }
+        if (error) {
+            return error;
+        }
 
-//         return true;
-//     } catch (error) {
-//         console.error("Error saving user location:", error);
-//         throw new Error("Failed to save location");
-//     }
-// };
+        return dataReturn;
+    } catch (error) {
+        console.error("Error saving user location:", error);
+        throw new Error("Failed to save location");
+    }
+};
 
 // export const deleteLocation = async (locationId, date) => {
 //     try {

@@ -1,15 +1,24 @@
 import { httpClient } from "@/app/plugins/axios";
 
-export const useApi = async (url: string, params: object = {}) => {
+export const useApi = async (
+    url: string,
+    params: object = {},
+    method: string = "get",
+) => {
     let dataReturn: any[] = [];
-    const error = null;
+    let error = null;
 
-    await httpClient
-        .get(url, { params })
+    await httpClient({
+        url,
+        method,
+        params,
+    })
         .then(({ data }) => {
             dataReturn = data.data;
         })
-        .catch((error) => (error.value = error));
+        .catch((err) => {
+            error = err;
+        });
 
     return { dataReturn, error };
 };
