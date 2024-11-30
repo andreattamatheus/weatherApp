@@ -12,6 +12,7 @@
         "core-js": "^3.8.3",
         "dotenv": "^16.3.1",
         "node-sass": "^9.0.0",
+        "pinia": "^2.2.8",
         "sass-loader": "^13.3.2",
         "tw-elements": "^1.0.0-beta3",
         "vue": "^3.2.36",

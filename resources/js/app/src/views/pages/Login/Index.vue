@@ -43,7 +43,7 @@
 import Loading from 'vue-loading-overlay';
 import NotificationPopUp from '@/views/components/notifications/NotificationPopUp.vue';
 import ValidationForm from '@/mixins/ValidationForm';
-import { AuthController } from "./AuthController";
+import { login } from "./useAuthController";
 
 export default {
     name: "LoginView",
@@ -80,8 +80,7 @@ export default {
             try {
                 this.isLoading = true;
                 if (this.validateForm()) {
-                    const authController = new AuthController();
-                    const response = await authController.login(this.form);
+                    const response = await login(this.form);
 
                     if (response.statusCode !== 200) {
                         this.validationErrors = await this.convertErrorFromArray(response.body.errors);

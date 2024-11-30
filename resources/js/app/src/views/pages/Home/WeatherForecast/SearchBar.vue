@@ -6,12 +6,12 @@
             </h2>
         </div>
         <div class="flex w-full flex-col justify-start text-left">
-            <InputTextField fieldLabel="City" v-model="city" id="city" placeholder="Enter the city name"
-                :validationErrors="validationErrors.city" required />
+            <InputTextField fieldLabel="City" fieldName="city" v-model="city" id="city"
+                placeholder="Enter the city name" :validationErrors="validationErrors.city" required />
         </div>
         <div class="flex w-full flex-col justify-start text-left">
-            <InputSelectField fieldLabel="Country" fieldType="country" v-model="state" id="country-select"
-                placeholder="Select a country" :options="countryList" :validationErrors="validationErrors.state"
+            <InputSelectField fieldLabel="Country" fieldName="country" v-model="country" id="country-select"
+                placeholder="Select a country" :options="countryList" :validationErrors="validationErrors.country"
                 required />
         </div>
 
@@ -32,7 +32,7 @@
 import InputTextField from "@/views/components/InputTextField.vue";
 import InputSelectField from "@/views/components/InputSelectField.vue";
 import { getForecastByCityAndState, getLocations } from "@/views/pages/Home/WeatherForecast/useLocationController";
-import { CountryController } from "@/views/pages/Home/WeatherForecast/CountryController";
+import { getCountries } from "@/views/pages/Home/WeatherForecast/useCountryController";
 
 export default {
     components: { InputTextField, InputSelectField },
@@ -40,11 +40,11 @@ export default {
     data() {
         return {
             city: "",
-            state: "",
+            country: "",
             countryList: [],
             validationErrors: {
                 city: "",
-                state: "",
+                country: "",
             },
         };
     },
@@ -53,14 +53,11 @@ export default {
     methods: {
         async getForecastByCityAndState() {
             console.log("getForecastByCityAndState");
-            console.log(this.city, this.state);
             try {
                 this.isLoading = true;
-                const weatherData =
-                    await getForecastByCityAndState(
-                        this.city,
-                        this.state["name"],
-                    );
+                const weatherData = await getForecastByCityAndState(
+                    { city: this.city, state: this.country }
+                );
                 this.$emit("getForecast", weatherData);
             } catch (error) {
                 console.log(error);
@@ -72,14 +69,16 @@ export default {
         async getCountryList() {
             try {
                 this.isLoading = true;
-                const countryController = new CountryController();
-                const response = await countryController.get();
-                this.countryList = response.data;
+                const response = await getCountries();
+                this.countryList = response;
             } catch (error) {
                 console.log(error);
             } finally {
                 this.isLoading = false;
             }
+        },
+        setValue(value) {
+            this.country = value
         },
     },
     created() { },

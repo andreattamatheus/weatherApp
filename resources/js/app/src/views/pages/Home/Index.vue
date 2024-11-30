@@ -5,7 +5,7 @@ import IconLocation from '@/views/components/icons/IconLocation.vue';
 import ListFilter from '@/views/components/ListFilter.vue';
 import ForecastCard from '@/views/pages/Home/WeatherForecast/ForecastCard.vue';
 import SearchBar from '@/views/pages/Home/WeatherForecast/SearchBar.vue';
-import Card from './WeatherForecast/Card.vue';
+import LocationCard from './WeatherForecast/LocationCard.vue';
 import {
     getLocations,
     getForecastByCityAndState,
@@ -18,7 +18,7 @@ export default {
     components: {
         Loading,
         Spinner,
-        Card,
+        LocationCard,
         ListFilter,
         IconLocation,
         ForecastCard,
@@ -29,7 +29,6 @@ export default {
             isLoading: false,
             isLoadingForecast: false,
             fullPage: false,
-            imageUrl: process.env.VUE_APP_IMAGE_WEATHER_URL,
             weatherData: null,
             userLocations: [],
         };
@@ -62,9 +61,6 @@ export default {
             }
         },
 
-        getIcon(icon) {
-            return this.imageUrl + `/${icon}@2x.png`;
-        },
 
         async getForecast(weatherData) {
             this.weatherData = weatherData;
@@ -94,9 +90,9 @@ export default {
             </div>
             <div class="max-w-[1280px] w-ful h-full mx-auto p-8 ">
                 <div class="flex lg:flex-row flex-col space-x-0 lg:space-x-4 items-center lg:items-start ">
-                    <SearchBar />
+                    <SearchBar @getForecast="getForecast" />
                     <div v-if="weatherData" class="w-full lg:w-1/2 border-solid border-2 border-gray-200 rounded">
-                        <ForecastCard v-if="!weatherData" @getForecast="getForecast" :weatherData="weatherData"
+                        <ForecastCard :weatherData="weatherData"
                             :isLoading="isLoading" />
                     </div>
                 </div>
@@ -116,7 +112,7 @@ export default {
                     <div v-else class="forecast-list">
                         <div class="next flex pb-2 flex-col relative cursor-pointer rounded-xl border border-border-muted"
                             v-for="(location) in userLocations" :key="location.id">
-                            <Card :location="location" @delete="deleteUserLocation" @getIcon="getIcon" />
+                            <LocationCard :location="location" @delete="deleteUserLocation"/>
                         </div>
                     </div>
                 </div>

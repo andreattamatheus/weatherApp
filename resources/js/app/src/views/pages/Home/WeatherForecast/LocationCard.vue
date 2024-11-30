@@ -61,6 +61,7 @@ export default {
     },
     data() {
         return {
+            imageUrl: process.env.VUE_APP_IMAGE_WEATHER_URL,
         }
     },
     watch: {},
@@ -70,8 +71,8 @@ export default {
             this.$emit('delete', id, date)
         },
         getIcon(icon) {
-            this.$emit('getIcon', icon)
-        }
+            return this.imageUrl + `/${icon}@2x.png`;
+        },
     },
     created() { },
     mounted() { }

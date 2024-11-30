@@ -5,7 +5,7 @@ export const useApi = async (
     params: object = {},
     method: string = "get",
 ) => {
-    let dataReturn: any[] = [];
+    let dataReturn: any = {};
     let error = null;
 
     await httpClient({

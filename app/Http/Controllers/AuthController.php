@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthLoginRequest;
+use App\Http\Resources\AuthResouce;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,11 +25,11 @@ class AuthController extends Controller
         $user = User::query()->where('email', $request->get('email'))->firstOrFail();
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json([
+        return AuthResouce::make([
             'success' => true,
             'message' => 'User logged in successfully',
             'access_token' => $token,
-        ], Response::HTTP_OK);
+        ])->response()->setStatusCode(Response::HTTP_OK);
     }
 
     /**
