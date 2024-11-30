@@ -1,14 +1,14 @@
 <template>
     <div>
         <label class="uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 block" for="country-select">
-            Country
+            {{ fieldLabel }}
         </label>
         <select :value="value" id="country-select"
             class="flex h-10 w-full rounded-lg border bg-input px-3 py-2.5 text-sm caret-primary transition-all placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 focus-visible:ring-ring"
             required>
-            <option disabled value="">Select a country</option>
-            <option v-for="country in options" :key="country.code" :value="country">{{
-                country.name }}
+            <option disabled value="">Select a {{ fieldType }}</option>
+            <option v-for="modelValue in options" :key="modelValue.code" :value="modelValue">
+                {{ modelValue.name }}
             </option>
         </select>
         <span class="text-sm text-red-500 mt-1 ml-1" v-if="validationErrors.state">
@@ -24,7 +24,11 @@ export default {
     props: {
         fieldLabel: {
             type: String,
-            required: false
+            required: true
+        },
+        fieldType: {
+            type: String,
+            required: true
         },
         value: {
             type: String,

@@ -121,7 +121,7 @@
 </template>
 
 <script>
-import Spinner from '@/components/Spinner.vue'
+import Spinner from '@/views/components/Spinner.vue'
 
 export default {
     name: 'ForecastCard',

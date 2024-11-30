@@ -61,6 +61,6 @@ export default {
 }
 </script>
 
-<style scoped src="@/views/Error/styles.css">
+<style scoped src="./styles.css">
 </style>
 

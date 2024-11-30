@@ -1,4 +1,4 @@
-import { httpClient } from "../plugins/axios";
+import { httpClient } from "@/app/plugins/axios";
 
 export class CountryController {
     async get() {

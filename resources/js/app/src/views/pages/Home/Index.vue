@@ -1,63 +1,17 @@
-<template>
-    <div class="flex">
-        <div class="w-full flex flex-col items-start bg-background-primary " ref="formContainer">
-            <div class="toolbar w-full px-1 py-0 bg-gray-100">
-                <div class="w-[1280px] mx-auto lg:w-3/4 flex justify-between items-center ">
-                    <div class="flex align-center items-center">
-                        <img src="../../assets/logo-weather-app.png" width="100px" alt="Logo">
-                        <h1 class="font-semibold text-lg">WEATHER APP</h1>
-                    </div>
-                    <div>
-                        <button class="text-gray-700 hover:text-gray-800 focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-gray-300 dark:hover:text-gray-400 dark:focus:ring-gray-600">
-                            <i class="fas fa-expand-alt"></i>
-                        </button>
-                    </div>
-
-                </div>
-            </div>
-            <div class="max-w-[1280px] w-ful h-full mx-auto p-8 ">
-                <div class="flex lg:flex-row flex-col space-x-0 lg:space-x-4 items-center lg:items-start ">
-                    <SearchBar />
-                    <div v-if="!weatherData" class="w-full lg:w-1/2 border-solid border-2 border-gray-200 rounded">
-                        <ForecastCard v-if="!weatherData" @getForecast="getForecast" :weatherData="weatherData" :isLoading="isLoading" />
-                    </div>
-                </div>
-
-
-                <div class="flex-1 mt-10">
-                    <div class="flex items-center gap-4 md:pt-6 mb-4">
-                        <div
-                            class="grid size-9 place-items-center rounded-lg border border-border-muted bg-secondary bg-[radial-gradient(65%_65%_at_50%_35%,#20282D_0%,#0D1113_100%)] md:size-10">
-                            <IconLocation class="w-6 h-6 text-white" />
-                        </div>
-                        <h2 class="text-xl font-semibold tracking-tighter md:text-2xl lg:text-3xl">User locations
-                        </h2>
-                    </div>
-
-                    <ListFilter />
-                    <Spinner class="w-full max-w-screen-sm" v-if="isLoadingForecast" />
-                    <div v-else class="forecast-list">
-                        <div class="next flex pb-2 flex-col relative cursor-pointer rounded-xl border border-border-muted"
-                            v-for="(location) in userLocations" :key="location.id">
-                            <Card :location="location" @delete="deleteUserLocation" @getIcon="getIcon" />
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</template>
-
 <script>
 import Loading from 'vue-loading-overlay';
-import Spinner from '@/components/Spinner.vue';
-import Card from '@/components/Card.vue';
-import ListFilter from '@/components/ListFilter.vue';
-import IconLocation from '@/components/icons/IconLocation.vue';
-import ForecastCard from '@/views/Home/WeatherForecast/ForecastCard.vue';
-import SearchBar from '@/views/Home/WeatherForecast/SearchBar.vue';
-import {LocationController} from "@/controllers/LocationController";
+import Spinner from '@/views/components/Spinner.vue';
+import IconLocation from '@/views/components/icons/IconLocation.vue';
+import ListFilter from '@/views/components/ListFilter.vue';
+import ForecastCard from '@/views/pages/Home/WeatherForecast/ForecastCard.vue';
+import SearchBar from '@/views/pages/Home/WeatherForecast/SearchBar.vue';
+import Card from './WeatherForecast/Card.vue';
+import {
+    getLocations,
+    getForecastByCityAndState,
+    save,
+    deleteLocation,
+} from "@/views/pages/Home/WeatherForecast/useLocationController";
 
 export default {
     name: "Home",
@@ -87,8 +41,7 @@ export default {
         async fetchUserData() {
             try {
                 this.isLoadingForecast = true;
-                const locationController = new LocationController();
-                this.userLocations = await locationController.get();
+                this.userLocations = await getLocations();
             } catch (error) {
                 console.log(error);
             } finally {
@@ -121,11 +74,60 @@ export default {
 };
 </script>
 
-<style>
-/* styles.css */
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@300;700&display=swap');
+<template>
+    <div class="flex">
+        <div class="w-full flex flex-col items-start bg-background-primary " ref="formContainer">
+            <div class="toolbar w-full px-1 py-0 bg-gray-100">
+                <div class="w-[1280px] mx-auto lg:w-3/4 flex justify-between items-center ">
+                    <div class="flex align-center items-center">
+                        <img src="../../../assets/logo-weather-app.png" width="100px" alt="Logo">
+                        <h1 class="font-semibold text-lg">WEATHER APP</h1>
+                    </div>
+                    <div>
+                        <button
+                            class="text-gray-700 hover:text-gray-800 focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-gray-300 dark:hover:text-gray-400 dark:focus:ring-gray-600">
+                            <i class="fas fa-expand-alt"></i>
+                        </button>
+                    </div>
 
+                </div>
+            </div>
+            <div class="max-w-[1280px] w-ful h-full mx-auto p-8 ">
+                <div class="flex lg:flex-row flex-col space-x-0 lg:space-x-4 items-center lg:items-start ">
+                    <SearchBar />
+                    <div v-if="weatherData" class="w-full lg:w-1/2 border-solid border-2 border-gray-200 rounded">
+                        <ForecastCard v-if="!weatherData" @getForecast="getForecast" :weatherData="weatherData"
+                            :isLoading="isLoading" />
+                    </div>
+                </div>
+
+                <div class="flex-1 mt-10">
+                    <div class="flex items-center gap-4 md:pt-6 mb-4">
+                        <div
+                            class="grid size-9 place-items-center rounded-lg border border-border-muted bg-secondary bg-[radial-gradient(65%_65%_at_50%_35%,#20282D_0%,#0D1113_100%)] md:size-10">
+                            <IconLocation class="w-6 h-6 text-white" />
+                        </div>
+                        <h2 class="text-xl font-semibold tracking-tighter md:text-2xl lg:text-3xl">User locations
+                        </h2>
+                    </div>
+
+                    <ListFilter />
+                    <Spinner class="w-full max-w-screen-sm" v-if="isLoadingForecast" />
+                    <div v-else class="forecast-list">
+                        <div class="next flex pb-2 flex-col relative cursor-pointer rounded-xl border border-border-muted"
+                            v-for="(location) in userLocations" :key="location.id">
+                            <Card :location="location" @delete="deleteUserLocation" @getIcon="getIcon" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+
+<style>
 /* General Styles */
 html,
 body {
