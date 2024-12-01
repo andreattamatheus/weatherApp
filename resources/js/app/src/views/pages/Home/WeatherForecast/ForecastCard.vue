@@ -123,7 +123,7 @@
 import { ref } from 'vue';
 import Spinner from '@/views/components/Spinner.vue';
 import { useWeatherDataStore } from "@/store/WeatherData";
-import { save } from './useLocationController';
+import { saveLocation } from './useLocationController';
 
 const props = defineProps({
     isLoading: {
@@ -138,7 +138,7 @@ const isLoading = ref(props.isLoading);
 async function saveUserLocation() {
     try {
         isLoading.value = true;
-        weatherDataStore.weatherData = save(
+        weatherDataStore.weatherData = saveLocation(
             weatherDataStore.weatherData
         );
     } catch (error) {
