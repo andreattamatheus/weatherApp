@@ -17,7 +17,7 @@
 
         <button
             class="focus-visible:ring-offset-background focus-visible:ring-ring text-sky-700-foreground hover:bg-brand-seagull-500 active:bg-brand-seagull-500 relative mt-2 inline-flex min-h-10 items-center justify-center overflow-hidden whitespace-nowrap rounded-full border border-transparent bg-sky-700 px-4 py-1.5 text-base font-medium text-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-            @click="getForecastByCityAndState">
+            @click="getData">
             <span class="inline-flex items-center justify-center gap-2" style="
                     opacity: 1;
                     filter: blur(0px);
@@ -28,64 +28,60 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
 import InputTextField from "@/views/components/InputTextField.vue";
 import InputSelectField from "@/views/components/InputSelectField.vue";
 import { getForecastByCityAndState, getLocations } from "@/views/pages/Home/WeatherForecast/useLocationController";
 import { getCountries } from "@/views/pages/Home/WeatherForecast/useCountryController";
+import { useWeatherDataStore } from "@/store/WeatherData";
 
-export default {
-    components: { InputTextField, InputSelectField },
-    props: {},
-    data() {
-        return {
-            city: "",
-            country: "",
-            countryList: [],
-            validationErrors: {
-                city: "",
-                country: "",
-            },
-        };
-    },
-    watch: {},
-    computed: {},
-    methods: {
-        async getForecastByCityAndState() {
-            console.log("getForecastByCityAndState");
-            try {
-                this.isLoading = true;
-                const weatherData = await getForecastByCityAndState(
-                    { city: this.city, state: this.country }
-                );
-                this.$emit("getForecast", weatherData);
-            } catch (error) {
-                console.log(error);
-            } finally {
-                this.isLoading = false;
-            }
-        },
+const weatherData = useWeatherDataStore();
 
-        async getCountryList() {
-            try {
-                this.isLoading = true;
-                const response = await getCountries();
-                this.countryList = response;
-            } catch (error) {
-                console.log(error);
-            } finally {
-                this.isLoading = false;
-            }
-        },
-        setValue(value) {
-            this.country = value
-        },
-    },
-    created() { },
-    mounted() {
-        this.getCountryList();
-    },
-};
+const city = ref("");
+const country = ref("");
+const countryList = ref([]);
+const validationErrors = ref({
+    city: "",
+    country: "",
+});
+
+const isLoading = ref(false);
+
+async function getData() {
+    console.log("getForecastByCityAndState");
+    try {
+        isLoading.value = true;
+        const weatherDataResponse = await getForecastByCityAndState(
+            { city: city.value, state: country.value }
+        );
+        weatherData.setWeatherData(weatherDataResponse);
+    } catch (error) {
+        console.log(error);
+    } finally {
+        isLoading.value = false;
+    }
+}
+
+async function getCountryList() {
+    try {
+        isLoading.value = true;
+        const response = await getCountries();
+        countryList.value = response;
+    } catch (error) {
+        console.log(error);
+    } finally {
+        isLoading.value = false;
+    }
+}
+
+function setValue(value) {
+    country.value = value;
+}
+
+onMounted(() => {
+    getCountryList();
+});
 </script>
 
 <style></style>

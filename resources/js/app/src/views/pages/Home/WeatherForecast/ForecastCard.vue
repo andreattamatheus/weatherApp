@@ -7,13 +7,13 @@
             <div class="flex justify-between">
                 <div class="flex flex-col">
                     <span class="text-4xl font-bold"
-                        >{{ weatherData?.max_temperature }} °C</span
+                        >{{ weatherDataStore.weatherData?.max_temperature }} °C</span
                     >
                     <span class="mt-1 font-semibold text-gray-500"
-                        >{{ weatherData?.city }}, {{ weatherData?.state }}</span
+                        >{{ weatherDataStore.weatherData?.city }}, {{ weatherDataStore.weatherData?.state }}</span
                     >
                     <span class="mt-1 font-semibold text-gray-500">{{
-                        weatherData?.condition
+                        weatherDataStore.weatherData?.condition
                     }}</span>
                 </div>
                 <svg
@@ -119,50 +119,33 @@
         </div>
     </div>
 </template>
+<script setup>
+import { ref } from 'vue';
+import Spinner from '@/views/components/Spinner.vue';
+import { useWeatherDataStore } from "@/store/WeatherData";
+import { save } from './useLocationController';
 
-<script>
-import Spinner from '@/views/components/Spinner.vue'
+const props = defineProps({
+    isLoading: {
+        type: Boolean,
+        required: true,
+    },
+});
 
-export default {
-    name: 'ForecastCard',
-    components: {
-        Spinner,
-    },
-    props: {
-        weatherData: {
-            type: Object,
-            required: false,
-        },
-        isLoading: {
-            type: Boolean,
-            required: true,
-        },
-    },
-    data() {
-        return {}
-    },
-    watch: {},
-    computed: {},
-    methods: {
-        async saveUserLocation() {
-            try {
-                this.isLoading = true
-                const locationController = new LocationController()
-                this.weatherData = await locationController.save(
-                    this.city,
-                    this.state['name'],
-                    this.weatherData
-                )
-                await this.fetchUserData()
-            } catch (error) {
-                console.log(error)
-            } finally {
-                this.isLoading = false
-            }
-        },
-    },
-    created() {},
-    mounted() {},
+const weatherDataStore = useWeatherDataStore();
+const isLoading = ref(props.isLoading);
+
+async function saveUserLocation() {
+    try {
+        isLoading.value = true;
+        weatherDataStore.weatherData = save(
+            weatherDataStore.weatherData
+        );
+    } catch (error) {
+        console.log(error);
+    } finally {
+        isLoading.value = false;
+    }
 }
 </script>
 

@@ -1,5 +1,5 @@
-<script>
-import Loading from 'vue-loading-overlay';
+<script setup>
+import { ref, onMounted } from 'vue';
 import Spinner from '@/views/components/Spinner.vue';
 import IconLocation from '@/views/components/icons/IconLocation.vue';
 import ListFilter from '@/views/components/ListFilter.vue';
@@ -8,66 +8,41 @@ import SearchBar from '@/views/pages/Home/WeatherForecast/SearchBar.vue';
 import LocationCard from './WeatherForecast/LocationCard.vue';
 import {
     getLocations,
-    getForecastByCityAndState,
-    save,
     deleteLocation,
 } from "@/views/pages/Home/WeatherForecast/useLocationController";
+import { useWeatherDataStore } from "@/store/WeatherData";
 
-export default {
-    name: "Home",
-    components: {
-        Loading,
-        Spinner,
-        LocationCard,
-        ListFilter,
-        IconLocation,
-        ForecastCard,
-        SearchBar
-    },
-    data() {
-        return {
-            isLoading: false,
-            isLoadingForecast: false,
-            fullPage: false,
-            weatherData: null,
-            userLocations: [],
-        };
-    },
-    mounted() {
-        this.fetchUserData();
-    },
-    methods: {
-        async fetchUserData() {
-            try {
-                this.isLoadingForecast = true;
-                this.userLocations = await getLocations();
-            } catch (error) {
-                console.log(error);
-            } finally {
-                this.isLoadingForecast = false;
-            }
-        },
+const weatherDataStore = useWeatherDataStore();
+const isLoading = ref(false);
+const isLoadingForecast = ref(false);
+const userLocations = ref([]);
 
-        async deleteUserLocation(locationId, date) {
-            try {
-                this.isLoading = true;
-                const locationController = new LocationController();
-                this.weatherData = await locationController.delete(locationId, date);
-                await this.fetchUserData();
-            } catch (error) {
-                console.log(error);
-            } finally {
-                this.isLoading = false;
-            }
-        },
-
-
-        async getForecast(weatherData) {
-            this.weatherData = weatherData;
-        },
-
-    },
+const fetchUserData = async () => {
+    try {
+        isLoadingForecast.value = true;
+        userLocations.value = await getLocations();
+    } catch (error) {
+        console.log(error);
+    } finally {
+        isLoadingForecast.value = false;
+    }
 };
+
+const deleteUserLocation = async (locationId, date) => {
+    try {
+        isLoading.value = true;
+        await deleteLocation(locationId, date);
+        await fetchUserData();
+    } catch (error) {
+        console.log(error);
+    } finally {
+        isLoading.value = false;
+    }
+};
+
+onMounted(() => {
+    fetchUserData();
+});
 </script>
 
 <template>
@@ -90,10 +65,9 @@ export default {
             </div>
             <div class="max-w-[1280px] w-ful h-full mx-auto p-8 ">
                 <div class="flex lg:flex-row flex-col space-x-0 lg:space-x-4 items-center lg:items-start ">
-                    <SearchBar @getForecast="getForecast" />
-                    <div v-if="weatherData" class="w-full lg:w-1/2 border-solid border-2 border-gray-200 rounded">
-                        <ForecastCard :weatherData="weatherData"
-                            :isLoading="isLoading" />
+                    <SearchBar />
+                    <div v-if="weatherDataStore.weatherData && Object.keys(weatherDataStore.weatherData).length" class="w-full lg:w-1/2 border-solid border-2 border-gray-200 rounded">
+                        <ForecastCard :isLoading="isLoading" />
                     </div>
                 </div>
 
